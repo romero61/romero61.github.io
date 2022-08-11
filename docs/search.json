@@ -1,26 +1,5 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Guillermo Romero",
-    "section": "",
-    "text": "I am currently pursuing a Master’s of Environmental Data Science at the Bren School of Environmental Science & Management. I graduated from the University of California, Santa Barbara in 2022 with an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in G.I.S.\nMy current goal is to work on the problems of clean water in conjunction with remote sensing and the application of data science is at the forefront of dealing with these issues. Improving water use efficiency, reduction of wasteful water use, real-time water quality monitoring, forecasting water quality, and identifying issues with water supply are the problems that I seek to apply the data science skills I am attaining from the MEDS program. The issues associated with water are global and the opportunity to help in these areas speaks directly to what I seek to accomplish professionally."
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "Place holder for presenting my previous remote sensing and GIS projects."
-  },
-  {
     "objectID": "resume.html",
     "href": "resume.html",
     "title": "resume",
