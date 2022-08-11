@@ -10,6 +10,8 @@ about:
       href: https://github.com/romero61
     - text: Email
       href: mailto:romero61@bren.ucsb.edu
+    - text: Linkedin
+      href: https://www.linkedin.com/in/romero61
 editor_options: 
   chunk_output_type: console
 ---
