@@ -1,0 +1,6 @@
+---
+title: "resume"
+editor: visual
+---
+
+[Download Resume Here](resume22.docx){style="color: red"}

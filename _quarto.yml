@@ -5,14 +5,18 @@ project:
 website:
   title: "Guillermo Romero"
   navbar:
+    search: true
+    background: light
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-
+      - projects.qmd
+      - resume.qmd
 format:
   html:
-    theme: cosmo
+    theme: 
+      dark: cyborg
+      light: lux
     css: styles.css
     toc: true
 

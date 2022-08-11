@@ -1,6 +1,6 @@
 ---
 title: "Guillermo Romero"
-image: headshot.jpg
+image: img/headshot.jpg
 about: 
   template: solana
   image-shape: round
@@ -10,7 +10,14 @@ about:
       href: https://github.com/romero61
     - text: Email
       href: mailto:romero61@bren.ucsb.edu
+editor_options: 
+  chunk_output_type: console
 ---
 
-\
-Deciding that I needed to alter my life's trajectory I decided to leave my career in supply chain logistics as my outdoor passion drove me towards making an impact. I am currently pursuing a Master's of Environmental Data Science at the Bren School of Environmental Science & Management. I graduated from the University of California,Santa Barbara in 2022 with an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in G.I.S. My current goal is to work on the problems of clean water in conjunction with remote sensing and the application of data science is at the forefront of dealing with these issues. Improving water use efficiency, reduction of wasteful water use, real-time water quality monitoring, forecasting water quality, and identifying issues with water supply are the problems that I seek to apply the data science skills I am attaining from the MEDS program. The issues associated with water are global and the opportunity to help in these areas speaks directly to what I seek to accomplish professionally.
+Deciding that I needed to alter my life's trajectory I decided to leave my career in supply chain logistics as my outdoor passion drove me towards making an impact.
+
+I am currently pursuing a Master's of Environmental Data Science at the Bren School of Environmental Science & Management. I graduated from the University of California, Santa Barbara in 2022
+with an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in G.I.S.
+
+My current goal is to work on the problems of clean water in conjunction with remote sensing and the application of data science is at the forefront of dealing with these issues. Improving water use efficiency, reduction of wasteful water use, real-time water quality
+monitoring, forecasting water quality, and identifying issues with water supply are the problems that I seek to apply the data science skills I am attaining from the MEDS program. The issues associated with water are global and the opportunity to help in these areas speaks directly to what I seek to accomplish professionally.

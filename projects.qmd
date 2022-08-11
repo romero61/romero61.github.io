@@ -1,0 +1,6 @@
+---
+title: "Projects"
+editor: visual
+---
+
+Place holder for presenting my previous remote sensing and GIS projects.
