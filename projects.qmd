@@ -1,6 +1,6 @@
 ---
 title: "Projects"
-editor: visual
+listing:
+  contents: posts
+  type: grid
 ---
-
-Place holder for presenting my previous remote sensing and GIS projects.
