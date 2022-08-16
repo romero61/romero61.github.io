@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Environmental Data Science - Remote Sensing of Chlorophyll-a Using Landsat 8</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Environmental Data Science</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html">Projects</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../resume.html">resume</a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#method" id="toc-method" class="nav-link" data-scroll-target="#method">Method</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Remote Sensing of Chlorophyll-a Using Landsat 8</h1>
+<p class="subtitle lead">Ocean remote sensing project extending analysis of Santa Monica Bay Chlorophyll-<em>a</em> from Trinh et al.&nbsp;2017 covering catastrophic failure of Hyperion Treatment Plant in 2020</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The research performed by Trinh et al.&nbsp;(2017) is centered on the capabilities of Landsat 8 OLI and Aqua MODIS to monitor water quality in the Santa Monica Bay (SMB). The water quality of the Santa Monica Bay is directly impacted by the adjacent Hyperion Treatment Plant (HTP), which discharges treated wastewater into its coastal waters. Wastewater discharge increases contaminant and nitrogen concentrations,which increase the likelihood of phytoplankton blooms and contaminant exposures. The phytoplankton biomass in the surface ocean is assessed by remotely sensing chlorophyll-<em>a</em> (chl-<em>a)</em> pigments within phytoplankton. To monitor the water quality impacted by wastewater discharge of the HTP, the researchers argue that the algorithms applied to remote sensing data to measure chlorophyll-a concentrations should be derived locally as opposed to the broad empirical algorithms used in the standard products of chlorophyll-a concentrations. A planned shutdown of the HTP in 2015, known as a diversion event, directly discharged wastewater 1-mile offshore in the shallow waters of the SMB instead of the ordinarily 5-mile outfall. The research uses the diversion event as a backdrop to assess Landsat 8 OLI and Aqua MODIS in their capability to measure chlorophyll-a concentrations using local vs.&nbsp;empirical algorithms and detect wastewater plumes.</p>
+<p>The analysis of the SMB during increased wastewater discharge in shallow waters is expanded by applying the findings of Trinh et al.&nbsp;to the July 11th, 2021, HTP failure in creating a time series of the SMB. At the time of the incident, 17 million gallons of untreated sewage were released 1-mile offshore, with reports of the plant operating at a diminished capacity several months after the initial failure.</p>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<p><em>In-situ</em> measurements of the study were taken before, during, and after the wastewater diversion event along a grid of 13 stations between August 26th and November 11th and, when possible, coinciding during satellite overpass in the SMB. At all stations, hydrographic profiles were collected using an SBE 19-plus Conductivity-Temperature-Depth package with chlorophyll fluorescence collected from 1m below the surface to 1m above the ocean floor. <em>In-situ</em> surface chlorophyll-a concentrations were derived from water samples taken on ten different dates at selected stations. Water samples were taken at 1 meter and analyzed fluorometrically for <em>chl-a</em> in a laboratory using a non-acidification method for 96 measurements. <em>In-situ</em> hyperspectral remote sensing reflectance was measured and derived from field measurements of spectral downwelling and upwelling irradiance using a Satlantic HyperPRO free-falling optical profiler equipped with a surface irradiance reference for a total of 49 measurements on nine separate dates. Level 1 satellite data was acquired from Landsat 8 from OLI, TIRS sensors, and level 1 satellite data from Aqua MODIS, TIR sensors.</p>
+<p>The analysis extension uses Landsat 8 OLI Level-2 surface reflectance products on six dates from June 6th to November 11th, 2021. Level-2 products are corrected for the temporally, spatially, and spectrally varying scattering and absorbing effects of atmospheric gases,aerosols, and water vapor. All images acquired from USGS are centered on 33°10’36.66”N – 118°42’58.32”W, on path 41 row 37 with a WGS84 datum and ellipsoid, on a U1TM Zone 11 projection.</p>
+</section>
+<section id="method" class="level1">
+<h1>Method</h1>
+<p>Using 36 measurements of in-situ data, two local chl-a algorithms were developed using respective blue and green wavebands of OLI and MODIS, where the natural log values of the measured surface chl-a concentrations are regressed on the natural log values of blue-green surface reflectance ratios (Figure 1).</p>
+<p><img src="images/Picture1.png" class="img-fluid"></p>
+<p>MODIS satellite data were used to produce a standard 1-km OC3M product (OC3M algorithm), a regional product (CALFIT algorithm), and application of their own locally derived algorithm to produce chl-a concentrations. Landsat 8 data retrievals from USGS were used to produce a standard OC2 chl-a product and application of their own locally derived algorithm to produce chl-a concentrations. To assess the accuracy of Landsat 8 (OC2) and MODIS (OC3M, CALFIT) algorithms to estimate chl-a concentrations, each algorithm was used with their respective blue-green wavebands (Figure 1) from in-situ measurements and compared to in-situ chl-a concentrations. Landsat 8 and MODIS surface reflectance data were applied to standard algorithms and the researcher’s local algorithm and compared against in-situ chl-a concentrations. A time-series analysis was completed using the local chl-a algorithm for OLI in which maximum chl-a concentrations for each OLI scene were found within Santa Monica Bay. Sea surface temperatures. Level 1 products of Landsat 8 and Aqua MODIS data were atmospherically corrected using a standard multi-scattering, radiative transfer model (TIRS), and iterative near-infrared (NIR) model (TIR). TIRS temperature was retrieved by inverting the atmospherically, and emissivity corrected TIRS radiances using a look-up table. Due to limitations of both OLI and MODIS accuracy and spatial extent of MODIS TIR, TIRS is only used to detect relative SST differences between plume and non-plume waters.</p>
+<p>The extension of the analysis acquired images in 2021 on six different dates, July 6th and 22nd, August 7th, October 10th and 26th, and November 11th. The images acquired were the best available in the study area without cloud cover. Pre-processing was performed in R using library packages “rgdal” and “raster” the images of surface reflectance of bands 2-7 were stacked together by date. Each image was masked and cropped using a custom Shapefile derived from a Los Angeles County Shapefile, limiting the extent to the coastal waters of the SMB up to the coastline. Erroneous pixel values that do not fall within the valid range for the Landsat surface reflectance product were overwritten; the valid range for all bands 1-7 is 7273-43636. The scale factor of the images was changed to 100. A time-series analysis was produced using the researchers’ local OLI algorithm of chl-a concentrations applying blue and green bands of each image data and exported for use in Qgis.</p>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>Wastewater plume detection via sea surface temperature (SST) was clearly detected by Landsat 8 TIRS, showing the relative temperature difference between the wastewater plume and ambient waters. Before and after the diversion event, no SST anomalies were detected; during the diversion event, at the 1- mile outfall pipe, decreased SSTs were clearly detected ~1 °C colder than the surrounding water. Comparisons to in-situ data were not provided due to TIRS SST data providing skin surface temperature measurements of the top few millimeters of the ocean surface, and in-situ measurements were taken at depths greater than 1m below the surface.</p>
+<p>The results of comparing estimated chl-a using standard algorithms and in-situ reflectance were reported as mean percent errors between estimated chl-a values and in-situ values. The OC2 algorithm had a ±40% mean percent error, the paper’s OLI local algorithm yielding a ±30% mean percent error using in-situ reflectance. The OC3M algorithm resulted in a ±35% mean percent error, with the regional CALFIT algorithm reported as more accurately estimating chl-a values but greatly overestimating high chl-a values. The derived local MODIS algorithm using in-situ reflectance resulted in estimated values with a mean percent error of ±32% of in-situ chl-a values. The standard algorithms tended to underestimate mid-level chl-a values and overestimate high chl-a values with respect to measured values, with the highest values falling well above the +30% error. The researcher’s local OLI algorithm was the best performing algorithm, with the lowest mean percent error and more accurate estimated chl-a values.</p>
+<p>The researchers used the scenes of Landsat 8 and MODIS on November 11th, 2015, to apply both the local algorithm and the standard chl-a algorithms, as this was the only day the satellite data coincided with in-situ reflectance and chl-a measurements (Figure 2). Overall, OLI chl-a retrievals were more accurate than MODIS. The local OLI chl-a algorithm outperformed MODIS (local and OC3M) and OC2 algorithms with a mean percent error of ∼29% and the smallest RMSE of ∼0.36. The standard OC2 algorithm underestimated chl-a values and had a mean percent error of ∼26% and RMSE of ∼0.58. The local MODIS chl-a algorithm performed better than the OC3M algorithm but still overestimated chl-a concentrations with a mean percent error of ∼37% and RMSE of ∼0.67. The standard OC3M algorithm had a mean percent error of ∼349% and RMSE of∼18.2, performing order of magnitude poorer than the local MODIS chl-a algorithm and either OLI algorithm (local or OC2). Establishing that the researchers Local OLI algorithm performed best, a time series analysis was used to evaluate the chlorophyll-a evolution in response to the wastewater diversion event (Figure 2).</p>
+<p><img src="images/trinhresult.png" class="img-fluid"></p>
+<p>The time series analysis was extended to observe the chlorophyll-<em>a</em> evolution in response to the HPT failure on July 11th, 2021(Figure 3). An initial 17 million gallons (5 million were pumped back) of untreated sewage was discharged through the 1-mile outfall pipe, shown on the researcher’s time series as the shorter black line. Reports indicate that the plant operated at a diminished capacity afterward. To show the evolution of chlorophyll-a, the main images are set to the scale of 7-22, using a cumulative count cut of 2%- 98% to filter out outliers in minimum and maximum values. The top end of the green portion of the scale represents an ~3.0 mg m<sup>-3</sup>, comparable to the researcher’s time-series scale. The top inset of each image uses individual scales, using a cumulative count cut of 2%- 98% to filter out outliers in minimum and maximum values. Each image’s bottom inset uses a cumulative count cut of 2%- 94% using a true-color image emphasizing the ocean color.</p>
+<p><img src="images/vertical.png" class="img-fluid"></p>
+<p>The first image before HTP failure shows elevated chlorophyll-a beginning ~3-miles offshore at ~3.0 mg m<sup>-3</sup> with pockets of higher values. The results on 07-22, eleven days after failure, are obfuscated by sporadic cloud coverage; despite this, there is evidence of elevated values of chl-<em>a</em> up against the coastline. <em>In-situ</em> measurements of chl-<em>a</em> concentrations could not be located to corroborate due to Covid-19 sampling restrictions; the only supporting evidence is a graph of Harmful algal blooms (HABs) (Figure 4) of Pseudo-nitzschia measured shortly up thecoast at the Santa Monica Pier. HABs of Pseudo-nitzschia can cause diseases and death in many marine organisms and the humans who consume them. HABs can result in oxygen depletion caused by increased biomass production&nbsp;(Timmerman, 2019). On 8-22, twenty-seven days after the massive HTP failure, chl-<em>a</em> concentration is still exceedingly high along the coastline. The final three images show an average of 1.74 mg m<sup>-3</sup> along the coastline when compared to the researcher’s scale is still on the high end. The November spike of Pseudo-nitzschia supports that the diminished capacity of HTP may have influenced any natural variations of phytoplankton biomass.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/paste-5672ECED.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 4: Measurements of HABs from Southern California Coastal Ocean Observing System. The focus is on July and November spikes.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>The researcher’s central finding is that applying their local chl-a algorithms, developed using in situ chl-a and in-situ reflectance measurements improves chl-a retrievals in the SMB during the 2015 HTP wastewater diversion in comparison to the standard open ocean algorithms. The paper also demonstrates the improved accuracy of chl-a from high-resolution OLI compared to coarser resolution MODIS for coastal chl-a detection. The researcher’s study was the first to use high-resolution Landsat 8 TIRS and OLI for coastal water quality monitoring of wastewater diversions. The extension of the analysis uses the researcher’s improved accuracy to measure the chl-a concentration in response to the HTP failure of 2021. Limited corroborating measurements limited the analysis to visual interpretation. Spatial-Temporal changes in chl-a concentrations are indicative of the possible effect of the 17 million gallons of untreated wastewater discharged into SMB. Further studies can apply these findings to a more in-depth analysis of the damage to the coastal water quality of the SMB and its effect on its marine ecosystems.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Timmerman, R. (2021, April 9th). California HAB Bulletin: March 2021 | Southern California Coastal Ocean Observing System. Sccoos.org. https://sccoos.org/california-hab-bulletin/march-2021/</p>
+<p>Trinh, R. C., Fichot, C. G., Gierach, M. M., Holt, B., Malakar, N. K., Hulley, G., &amp; Smith, J. (2017). Application of Landsat 8 for Monitoring Impacts of Wastewater Discharge on Coastal Water Quality. Frontiers in Marine Science, 4. https://doi.org/10.3389/fmars.2017.00329</p>
+<p>(2022). Hyperion 2021 Recovery (lacitysan.org)</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
