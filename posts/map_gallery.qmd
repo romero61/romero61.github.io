@@ -10,7 +10,7 @@ editor: visual
 
 #### A geologic map over Aster satellite imagery made with provided field notes, satellite imagery and some spectral data from the satellite-based ASTER instrument to figure out the distribution of rock units.
 
-[![](/images/L4map-1.png)](/images/L4map-1.png)
+[![](images/L4map-1.png)](images/L4map-1.png)
 
 #### John Snow
 
@@ -22,24 +22,27 @@ Recreation of the pivotal John Snow map of cholera outbreak.
 
 [![](images/LabFinal_.jpg)](images/LabFinal_.jpg)
 
-#### Geocoding and Chloropleth mapping
+#### Geocoding and Digitizing
 
 ::: {layout-ncol="2"}
-[![](images/geocodedpoints.png)](images/geocodedpoints.png)
+[![](images/digitizedmap.png)](images/digitizedmap.png)
 
-[![](/images/IFR.png)](/images/IFR.png)
+[![](images/geocodedpoints.png)](images/geocodedpoints.png)
 :::
 
-#### Kriging, IDW, and Chloropleth maps of Densisty
+#### Chloropleth, Kriging, and IDW mapping
 
-[![](/images/Map1-1.png)](/images/Map1-1.png)
 
-::: {layout-nrow="2"}
-[![](/images/IDW1-1.png)](/images/IDW1-1.png)
+::: {layout-ncol="2"}
+[![](images/IFR.png)](images/IFR.png)
 
-[![](/images/IDW2-1.png)](/images/IDW2-1.png)
+[![](images/Map1-1.png)](images/IFR.png)
 
-[![](/images/krig1-1.png)](/images/krig1-1.png)
+[![](images/krig1-1.png)](images/krig1-1.png)
 
-[![](/images/krig2-1.png)](/images/krig2-1.png)
+[![](images/krig2-1.png)](images/krig2-1.png)
+
+[![](images/IDW1-1.png)](images/IDW1-1.png)
+
+[![](images/IDW2-1.png)](images/IDW2-1.png)
 :::
