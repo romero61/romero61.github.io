@@ -67,9 +67,9 @@ ul.task-list{list-style: none;}
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -156,7 +156,7 @@ ul.task-list{list-style: none;}
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1662241915119" data-listing-reading-time-sort="4.755">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1641024000000" data-listing-file-modified-sort="1662268107568" data-listing-reading-time-sort="4.755">
 <a href="./posts/redlining_NDVI.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -169,60 +169,11 @@ Analyzing Greenness through NDVI in Redlined areas in Philadelphia, Pennsylvania
 <div class="card-text listing-description">
 University of California, Santa Barbara, Department of Geography - Undergrad Remote Sensing Group Poster Presentation
 </div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1662241915058" data-listing-reading-time-sort="0.355">
-<a href="./posts/field_report.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/images/File_010.jpeg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Field Methods In Hydrology - Field Report
-</h5>
-<div class="card-text listing-description">
-Writing Sample
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1662244763191" data-listing-reading-time-sort="0.3">
-<a href="./posts/map_gallery.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/images/GIS_Project_Final.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Map Gallery
-</h5>
-<div class="card-text listing-description">
-Collection of maps from undergrad.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1662241915058" data-listing-reading-time-sort="9.79">
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1662241915058" data-listing-reading-time-sort="9.79">
 <a href="./posts/SMB.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -235,10 +186,39 @@ Remote Sensing of Chlorophyll-a Using Landsat 8
 <div class="card-text listing-description">
 Ocean remote sensing project extending analysis of Santa Monica Bay Chlorophyll-<em>a</em> from Trinh et al.&nbsp;2017 covering catastrophic failure of Hyperion Treatment Plant in 2020
 </div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
 </div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1662241915058" data-listing-reading-time-sort="0.355">
+<a href="./posts/field_report.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/images/File_010.jpeg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Field Methods In Hydrology - Field Report
+</h5>
+<div class="card-text listing-description">
+Writing Sample
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1662245929787" data-listing-reading-time-sort="0.3">
+<a href="./posts/map_gallery.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/images/GIS_Project_Final.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Map Gallery
+</h5>
+<div class="card-text listing-description">
+Collection of maps from undergrad.
 </div>
 </div>
 </div>

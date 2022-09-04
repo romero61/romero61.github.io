@@ -3,6 +3,7 @@ title: "Analyzing Greenness through NDVI in Redlined areas in Philadelphia, Penn
 subtitle: "Guillermo Romero, Victoria Li, Duy Le, Monet Izutsu"
 description: "University of California, Santa Barbara, Department of Geography - Undergrad Remote Sensing Group Poster Presentation"
 editor: visual
+date: "01/01/2022"
 ---
 
 # Introduction

@@ -2,11 +2,13 @@
 title: "Map Gallery"
 description: Collection of maps from undergrad.
 editor: visual
+
 ---
 
 #### First Poster Created for an "Introduction to GIS" course created with ArcMap.
 
 [![](images/GIS_Project_Final.png)](images/GIS_Project_Final.png)
+
 
 #### A geologic map over Aster satellite imagery made with provided field notes, satellite imagery and some spectral data from the satellite-based ASTER instrument to figure out the distribution of rock units.
 

@@ -3,4 +3,6 @@ title: "Projects"
 listing:
   contents: posts
   type: grid
+  sort: date
+  fields: [image, title,description]
 ---
