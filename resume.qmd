@@ -3,7 +3,7 @@ title: "resume"
 editor: visual
 ---
 
-[[Download Resume Here](~/Documents/MEDS/romero61.github.io/romero_resume.docx)]{style="color: red"}
+[[Download Resume Here](romero_resume.docx)]{style="color: red"}
 
 # EDUCATION
 

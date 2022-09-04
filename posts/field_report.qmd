@@ -8,6 +8,6 @@ editor: visual
 
 Introduction to general field techniques used in hydrology including methods to determine river discharge,basic well and spring sampling, well water level measurements, and soil hydraulic characterization. The \~1 week course took place at Sagehen Creek Field Station (north of Truckee, CA) in the eastern Sierra prior to the start of the 2021 Fall quarter under the guidance of Prof. Jordan Clark and teaching assistant Shelby Smith.
 
-[Download Writing Sample Here](Romero_125_Field_Report.pdf){style="color: red"} 
+[View and Download Writing Sample Here](Romero_125_Field_Report.pdf){style="color: red"}
 
-![](Romero_125_Field_Report.pdf)
+![](Romero_125_Field_Report.pdf){fig-align="center"}
