@@ -3,7 +3,7 @@ title: "resume"
 editor: visual
 ---
 
-[[Download Resume Here](romero_resume.docx)]{style="color: red"}
+[Download Resume Here](Romero_Guillermo.pdf){style="color: red"}
 
 # EDUCATION
 
@@ -13,7 +13,9 @@ editor: visual
 
 **Bren School Of Environmental Science & Management - University of California, Santa Barbara**
 
-> Highlighted Coursework:
+> Highlighted Coursework: Machine Learning in Environmental Science, Databases and Data Management, Modeling Environmental Systems, Statistics for Environmental Data Science 
+(All to be completed by June 2023)
+
 
 ### **Bachelor of Science in Earth Science -- Geohydrology Emphasis**
 
@@ -23,6 +25,8 @@ editor: visual
 
 **University of California, Santa Barbara**
 
+> Honors/Awards: UCSB Scholarship, Outstanding Achievement in the Geography Major
+>
 > Highlighted Coursework:
 >
 > Remote Sensing- Advanced image processing, including data fusion and resampling techniques, atmospheric corrections, global navigation satellite systems, and hyperspatial sensors with emphasis on applications.
@@ -51,9 +55,11 @@ Associate of Arts in General Arts - Honors Associate of Arts in General Studies 
 
 ------------------------------------------------------------------------
 
-**Languages**: Spanish, R, Python, SQL, Matlab
+**Languages**: Spanish, R(tidyverse), Python(Pandsas,Scipy), SQL, Matlab
 
-**Environments**: Rstudio, ArcPro, Qgis
+**Environments**: Rstudio,Quarto ArcPro, Qgis
+
+**Technical**: Data Visualization, Machine Learning
 
 ### Additional Experience
 
@@ -61,19 +67,11 @@ Associate of Arts in General Arts - Honors Associate of Arts in General Studies 
 
 ##### General Warehouse Worker - Best Buy
 
-Los Angeles, CA (2018-2021)
-
-##### General Warehouse Tie 4 Safe
-
-Paramount, CA (2017-2018)
-
-##### Inventory Material Expediter - Qual-Pro Gardena, CA
-
-Gardena, CA (2016-2017)
+Los Angeles, CA(2018-2021)
 
 ##### SWAT Inventory Specialist - Best Buy
 
-Los Angeles, CA (2010-2015)
+Los Angeles, CA(2010-2015)
 
 # CERTIFICATIONS
 
