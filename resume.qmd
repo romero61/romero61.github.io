@@ -13,9 +13,7 @@ editor: visual
 
 **Bren School Of Environmental Science & Management - University of California, Santa Barbara**
 
-> Highlighted Coursework: Machine Learning in Environmental Science, Databases and Data Management, Modeling Environmental Systems, Statistics for Environmental Data Science 
-(All to be completed by June 2023)
-
+> Highlighted Coursework: Machine Learning in Environmental Science, Databases and Data Management, Modeling Environmental Systems, Statistics for Environmental Data Science (All to be completed by June 2023)
 
 ### **Bachelor of Science in Earth Science -- Geohydrology Emphasis**
 
@@ -55,23 +53,41 @@ Associate of Arts in General Arts - Honors Associate of Arts in General Studies 
 
 ------------------------------------------------------------------------
 
-**Languages**: Spanish, R(tidyverse), Python(Pandsas,Scipy), SQL, Matlab
+**Languages**: Spanish, R (tidyverse), Python (Pandas, Scipy), Markdown, SQL, MATLAB
 
-**Environments**: Rstudio,Quarto ArcPro, Qgis
+**Environments**: RStudio, Quarto, ArcPro, Qgis, Vscode, Jupyter Lab
 
-**Technical**: Data Visualization, Machine Learning
+**Technical**: Exploratory Data Analysis, Data Visualization, Machine Learning
 
-### Additional Experience
+## PROJECTS
+
+### ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PA 
+(4/22--6/22) 
+
+###### Undergraduate Poster Presentation Role: Team Lead 
+• Pre-processing (crop, mask, reclassify, NDVI calculation) of Landsat 8 OLI satellite data through Rstudio 
+• Qgis processing of NDVI raster calculations, zonal statistics and write memory function. 
+• Exploratory data analysis of U.S. Census median income data, NDVI data, and HOCL Redline data combined and processed through RStudio, Qgis and Excel.
+
+### Logistics Experience
 
 ------------------------------------------------------------------------
 
-##### General Warehouse Worker - Best Buy
+##### General Warehouse Worker -- Best Buy, Los Angeles, CA (9/18/-9/21)
 
-Los Angeles, CA(2018-2021)
+• Ensures daily home deliveries for all Southern California locations are correctly loaded.
 
-##### SWAT Inventory Specialist - Best Buy
+• Safeguard that defective and returned products are accurately processed and prepped for relocation.
 
-Los Angeles, CA(2010-2015)
+• Routes orders by locating the specified product and moving it to the loading dock
+
+##### SWAT Inventory Specialist -- Best Buy, Los Angeles, CA (5/2010 -- 11/2015)
+
+• Responsible for counting assigned product counts, entering counts into RSS, researching variances, and reporting discrepancies to management. Oversaw and prepared for annual physical inventory and assisted in post physical inventory reconciliation.
+
+• Supported senior management by delivering reports outlining performance to drive process improvements.
+
+• Coached employees around shrink trends and behaviors by communicating and coaching store employees and leadership on the importance of inventory integrity and any identified process gaps)
 
 # CERTIFICATIONS
 
