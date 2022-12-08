@@ -1,0 +1,314 @@
+---
+title: "NDVI in Redlined Regions"
+subtitle: "A statistical extension to previous work"
+description: "Supplement to 'Analyzing Greenness through NDVI in Redlined areas in Philadelphia, Pennsylvania'"
+editor: visual
+date: "12/01/2022"
+---
+
+```{r}
+#| echo: false
+#| message: false
+# Set your file path here! Or, set this up as an .Rproj if you'd like.
+rootdir <- ("/Users/guillermoromero/Documents/MEDS/eds222_stats/")
+
+# This runs the script _common.R, which loads all the packages we'll need for today and does some extra stuff we won't really use, at least for now.
+source(file.path(rootdir,"Labs","_common.R"))
+library(tidyverse)
+library(readxl)
+library(modelr)
+library(gt)
+library(plotly)
+library(ggplot2)
+library(janitor)
+```
+
+```{r}
+#| echo: false
+
+#import individual sheets 
+ndvi_90 <- read_excel("~/Documents/MEDS/eds222_stats/project/ndvi_income.xlsx", sheet = 1) 
+
+ndvi_00 <- read_excel("~/Documents/MEDS/eds222_stats/project/ndvi_income.xlsx", sheet = 2) 
+
+ndvi_10 <- read_excel("~/Documents/MEDS/eds222_stats/project/ndvi_income.xlsx", sheet = 3) 
+
+
+ndvi_20 <- read_excel("~/Documents/MEDS/eds222_stats/project/ndvi_income.xlsx", sheet = 4) 
+
+
+# combine to single df, make hocl_grade col a factor w/levels
+ndvi_income <- ndvi_90 %>% 
+  rbind(ndvi_00, ndvi_10, ndvi_20 ) %>% 
+  mutate(holc_grade = factor(holc_grade, levels = c('D', 'A')),
+         year = as.factor(year)) %>% 
+  janitor::clean_names()
+
+# remove individual imports
+rm(ndvi_90,ndvi_00, ndvi_10, ndvi_20)
+#subset to find minimum value not equal to zero
+findmin <- subset(ndvi_income, income != 0)
+#min(findmin$income) #2499
+
+#add half of min value for income equal to zero
+#2499/2 = 1250
+ndvi_income0 <- ndvi_income %>% 
+  mutate(income_mindiv2 = ifelse(income == 0,1250, income),
+         income_log = log(income_mindiv2),
+         ndvi_log = log(ndvi))
+  
+  
+
+#check levels
+#levels(ndvi_income$holc_grade)
+```
+
+# HOCL 'Redlining' {.smaller}
+
+'Redlining' is the term used for the racist, nativist, and class privileged maps and its grading system created by the Home Owners Loan corporation (HOCL) under the New Deal federal stimulus program of 1935. These HOCL grades and maps were used by mortgage lenders for decades furthering racial segregation and a disparity in financial resources
+
+A = Best
+
+B = Still Desirable
+
+C = Declining
+
+D = Hazardous
+
+• "Undesirable negro section of very poor property"
+
+• "Concentration of undesirables. Low class whites and negro"
+
+# NDVI {.smaller}
+
+::: panel-tabset
+### Question
+
+How does NDVI change with income in redlined areas?
+
+![](img/original_redline.png)
+
+### Data
+
+-   Use NDVI as a measure for greenness and vegetation coverage.
+-   Median Income by tract from U.S. Census
+
+![](img/wrt.png){fig-align="center"}
+
+### Statistics
+
+-   OLS to examine if the relationship of income & grading on NDVI
+-   Hypothesis testing comparing Mean NDVI based on grading
+
+![](img/areasandd.png){fig-align="center"}
+:::
+
+# Data Exploration
+
+Check the X variable has variation
+
+```{r}
+#| echo: true
+var(ndvi_income0$income_mindiv2) != 0
+```
+
+# Data Exploration
+
+::: panel-tabset
+### Boxplots
+
+```{r}
+pal <- c('firebrick1','deepskyblue')
+income_box <- plot_ly(ndvi_income0, x = ~year, y =~income, color = ~holc_grade, type = 'box', colors = pal)
+
+ndvi_box <- plot_ly(ndvi_income0, x = ~year, y =~ndvi, color = ~holc_grade, type = 'box', colors = pal)
+
+
+subplot(income_box, ndvi_box) %>% 
+   layout(autosize = F)
+
+```
+
+### Histograms
+
+```{r}
+hist_income <- plot_ly(ndvi_income0, x = ~income, type = 'histogram', colors = pal ) 
+
+
+#hist(ndvi_income0$income)
+hist_ndvi <- plot_ly(ndvi_income0, x = ~ndvi, type = 'histogram', colors = pal)
+#hist(ndvi_income0$ndvi)
+
+hist_log_income <- plot_ly(ndvi_income0, x = ~income_log, color = ~holc_grade, type = 'histogram', colors = pal)
+
+hist_log_ndvi <- plot_ly(ndvi_income0, x = ~ndvi_log, color = ~holc_grade, type = 'histogram', colors = pal)
+subplot(hist_income, hist_ndvi, hist_log_income, hist_log_ndvi) %>% 
+   layout( autosize= F)
+```
+
+### Scatterplots
+
+```{r}
+
+fig <- plot_ly(data = ndvi_income0, x = ~income, y = ~ndvi,color = ~holc_grade, colors = pal,
+               marker = list(size = 10,
+                             line = list(color = 'rgba(0, 0, 0, 1)',
+                                         width = 2)))
+
+fig <- fig %>% layout(
+         yaxis = list(zeroline = FALSE),
+         xaxis = list(zeroline = FALSE))
+
+
+
+figlog <- plot_ly(data = ndvi_income0, x = ~income_log, y = ~ndvi_log,color = ~holc_grade, colors = pal,
+               marker = list(size = 10,
+                             line = list(color = 'rgba(0, 0, 0, 1)',
+                                         width = 2)))
+
+figlog <- figlog %>% layout(
+         yaxis = list(zeroline = FALSE),
+         xaxis = list(zeroline = FALSE))
+
+subplot(fig, figlog) %>% 
+   layout( autosize = F)
+```
+:::
+
+# OLS Interaction Raw Data {.smaller}
+
+$$ \text{NDVI}_i = \beta_0 + \beta_1 \text{income}_i + \beta_2Grade + \beta_3income*Grade + \varepsilon_i $$
+
+```{r}
+#| echo: true
+mod <- lm(ndvi ~ income + holc_grade + income:holc_grade, data = ndvi_income0 )
+
+summary(mod)$adj.r.squared
+
+```
+
+# OLS log-log interaction {.smaller}
+
+$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i + \beta_2Grade + \beta_3log(income)*Grade + \varepsilon_i $$ Adjusted R-squared
+
+```{r}
+#| echo: true
+mod0 <- lm(ndvi_log ~ income_log + holc_grade + income_log:holc_grade, data = ndvi_income0 )
+summary(mod0)$adj.r.squared
+```
+
+# Residuals {.smaller}
+
+::: panel-tabset
+### Distribution
+
+```{r}
+#| panel: fill
+#| fig-width: 5
+#| fig-height: 2
+
+predictionslog <- ndvi_income0 %>% 
+  modelr::add_predictions(mod0) %>% 
+  mutate(residuals = ndvi_log-pred)
+
+ggplot(predictionslog) + geom_histogram(aes(residuals), bins = 25)
+
+```
+
+### Variance {.smaller}
+
+```{r}
+ggplot(predictionslog) + geom_point(aes(x = income_log, y = residuals), size =2)
+```
+:::
+
+# Coefficients {.smaller}
+
+$$ \text{log(NDVI)}_i = -0.170 + (-0.121) \text{log(income)}_i + (-0.729)Grade + (0.134)log(income)*Grade + \varepsilon_i $$
+
+```{r}
+lm(ndvi_log ~ income_log + holc_grade + income_log:holc_grade, data = ndvi_income0 ) %>% tidy() %>% 
+  gt()
+```
+
+Intercept: the coefficient is -0.170. For every 1% increase in the independent variable income, our dependent variable NDVI decreases by 0.17%.
+
+For every 1% increase in the independent variable INCOME, our dependent variable NDVI DECREASES by about 32.59" For region graded D, our dependent variable NDVI DECREASES by about 17.75
+
+The percentage of the impact of region grade on NDVI, is 42.07 higher in Region graded A than it is in region graded D.
+
+# Plot {.smaller}
+
+```{r}
+income_percent <- round(exp(coef(mod0)["income_log"] - 1) * 100,2)
+grade_percent <- round(exp(coef(mod0)["holc_gradeA"] - 1) * 100,2)
+interaction_percent <- round(exp(coef(mod0)["income_log:holc_gradeA"] - 1) * 100,2)
+```
+
+```{r}
+
+lm_plot <- ndvi_income0 |> 
+  ggplot(aes(x = income_log, y = ndvi_log, color = holc_grade)) +
+  geom_point() +
+  geom_line(data = augment(mod0), aes(y = .fitted)) + 
+  labs(x = "Median Income",
+       y = "Median NDVI") 
+lm_plot
+```
+
+# Hypothesis Testing {.smaller}
+
+::: panel-tabset
+### Difference {.smaller}
+
+```{r}
+ndvi_income_90 <- ndvi_income %>% 
+  filter(year == 1990)
+
+ndvi_income_20 <- ndvi_income %>% 
+  filter(year == 2020 )
+
+```
+
+a.  $$H_{0}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD} = 0 $$ $$H_{A}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD}  \neq 0$$
+
+```{r}
+t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[ndvi_income_90$holc_grade=='D'])
+```
+
+### \<0 {.smaller}
+
+```{r}
+t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[ndvi_income_90$holc_grade=='D'],alternative = 'less')
+```
+:::
+
+# Region A VS D in 2020 {.smaller}
+
+::: panel-tabset
+### Difference {.smaller}
+
+a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
+
+    $$H_{A}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD}  \neq 0$$
+
+```{r}
+t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='A'],ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'])
+```
+
+### \>0 {.smaller}
+
+```{r}
+t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='A'],ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'], alternative = 'greater')
+```
+:::
+
+# References
+
+[The log-0 problem: analysis strategies and options for choosing c in log(y + c) (rbind.io)](https://aosmith.rbind.io/2018/09/19/the-log-0-problem/)
+
+Nardone, Anthony, et al. "Redlines and Greenspace: The Relationship between Historical Redlining and 2010 Greenspace across the United States." National Institute of Environmental Health Sciences, U.S. Department of Health and Human Services, 27 Jan.2021, https://ehp.niehs.nih.gov/doi/10.1289/EHP7495.
+
+Casey, J.A.; James, P.; Cushing, L.; Jesdale, B.M.; Morello-Frosch, R. Race, Ethnicity, Income Concentration and 10-Year Change in Urban Greenness in the United States. Int. J. Environ. Res. Public Health 2017, 14, 1546, doi.org/10.3390/ijerph14121546
+
+https://romero61.github.io/posts/redlining_NDVI.html
