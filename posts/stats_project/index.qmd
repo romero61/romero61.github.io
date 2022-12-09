@@ -352,7 +352,12 @@ This relationship is not what we expected in that income increased from 1990 to 
 
 # Region A VS D in 2020 {.smaller}
 
-Finally to answer our initial question we compare two different graded regions in both their difference in NDVI and income. ::: panel-tabset \### Difference NDVI {.smaller}
+
+Finally to answer our initial question we compare two different graded regions in both their difference in NDVI and income. 
+
+::: panel-tabset 
+
+### Difference NDVI {.smaller}
 
 a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
 
@@ -374,11 +379,13 @@ When it comes to NDVI the results are statistically significant as the p-value i
 
 With regard to income and a p-value of 0.9 we fail to reject the null hypothesis that there that the true difference of means is equal to zero at $\alpha =0.5$
 
-I read this as that even though incomes have risen in regions in graded D to be statistically indiscernible from regions graded A, there is a statistically significant difference in greenness in the two regions and the greeness has decreased in D regions. :::
+I read this as that even though incomes have risen in regions in graded D to be statistically indiscernible from regions graded A, there is a statistically significant difference in greenness in the two regions and the greeness has decreased in D regions.
+
+:::
 
 # Conclusion
 
-The interpretations of the final hypothesis test tell us that there is a difference in regions graded A versus D but that they do not follow with income. The p-value of 0.09 in the linear regression for grade suggest that grade alone is not a significant indicator of NDVI but the interaction with income and its very low p-value that it should be considered. Further exploration of the relationship between incoming and grading and NDVI should include more of the spatial component and conitnous data if possible. :::
+The interpretations of the final hypothesis test tell us that there is a difference in regions graded A versus D but that they do not follow with income. The p-value of 0.09 in the linear regression for grade suggest that grade alone is not a significant indicator of NDVI but the interaction with income and its very low p-value that it should be considered. Further exploration of the relationship between incoming and grading and NDVI should include more of the spatial component and conitnous data if possible.
 
 # Data and Code
 
