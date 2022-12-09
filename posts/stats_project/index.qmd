@@ -63,6 +63,8 @@ ndvi_income0 <- ndvi_income %>%
 #levels(ndvi_income$holc_grade)
 ```
 
+# ![](img/Bren-LeafArtOnly-FullColor-RGB-transparent.png){width="147"}
+
 # Introduction
 
 In [ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PENNSYLVANIA](https://romero61.github.io/posts/redlining_NDVI/ "ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PENNSYLVANIA") the main focus was on applying the remote sensing skills developed through the course to be able to quantify and explore simple relationships between variables. Here I extend that previous work by applying statistical concepts learned in EDS 222 Statistics for Environmental Data Science.
@@ -352,11 +354,9 @@ This relationship is not what we expected in that income increased from 1990 to 
 
 # Region A VS D in 2020 {.smaller}
 
+Finally to answer our initial question we compare two different graded regions in both their difference in NDVI and income.
 
-Finally to answer our initial question we compare two different graded regions in both their difference in NDVI and income. 
-
-::: panel-tabset 
-
+::: panel-tabset
 ### Difference NDVI {.smaller}
 
 a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
@@ -380,7 +380,6 @@ When it comes to NDVI the results are statistically significant as the p-value i
 With regard to income and a p-value of 0.9 we fail to reject the null hypothesis that there that the true difference of means is equal to zero at $\alpha =0.5$
 
 I read this as that even though incomes have risen in regions in graded D to be statistically indiscernible from regions graded A, there is a statistically significant difference in greenness in the two regions and the greeness has decreased in D regions.
-
 :::
 
 # Conclusion
