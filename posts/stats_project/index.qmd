@@ -398,6 +398,7 @@ regions graded A versus D but that they do not follow with income. The p-value o
 indicator of NDVI but the interaction with income and its very low p-value that it
 should be considered. Further exploration of the relationship between incoming and grading 
 and NDVI should include more of the spatial component and conitnous data if possible.
+:::
 
 # References
 
