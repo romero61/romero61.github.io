@@ -198,7 +198,7 @@ var(ndvi_income0$income_mindiv2) != 0
 
 Our question is dependent on that we believe there is an interaction between income and grading resulting in different NDVI values. We first run the regression without the interaction to compare adjusted R-squared with the interaction.
 
-$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i  $$ 
+$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i  $$
 
 **ADJUSTED R-SQUARED**
 
@@ -215,15 +215,14 @@ summary(mod)
 
 ### W/ interaction
 
-$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i + \beta_2Grade + \beta_3log(income)*Grade + \varepsilon_i $$ 
+$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i + \beta_2Grade + \beta_3log(income)*Grade + \varepsilon_i $$
 
-A significant improved in **Adjusted R-squared** tells us adding the interaction of grade and income
-improves our model.
+A significant improved in **Adjusted R-squared** tells us adding the interaction of grade and income improves our model.
+
 ```{r}
 mod0 <- lm(ndvi_log ~ income_log + holc_grade + income_log:holc_grade, data = ndvi_income0 )
 summary(mod0)$adj.r.squared
 ```
-
 
 ```{r}
 #| echo: true
@@ -328,8 +327,6 @@ ndvi_income_20 <- ndvi_income %>%
 
 a.  $$H_{0}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD} = 0 $$ $$H_{A}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD}  \neq 0$$
 
-
-
 ```{r}
 t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[ndvi_income_90$holc_grade=='D'])
 ```
@@ -337,33 +334,25 @@ t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[n
 ### Difference Income {.smaller}
 
 $$H_{0}: \mu_{Income20gradeD} - \mu_{Income90gradeD} = 0 $$ $$H_{A}: \mu_{Income20gradeD} - \mu_{Income90gradeD}  \neq 0$$
- 
 
 ```{r}
 t.test(ndvi_income_20$income[ndvi_income_20$holc_grade=='D'],ndvi_income_90$income[ndvi_income_90$holc_grade=='D'])
 ```
+
 ### Interpretation
-We reject the null hypothesis that the differnce in means is equal to zero.
-The hypothesis test p-value is very small, so our results are significant in that
-there is a difference in means. 
 
-In examining the results we see that the values of the means we can see that there is a
-decrease in NDVI when comparing 2020 to 1990. This leads to the second hypothesis test
-of comparing the means in income. 
+We reject the null hypothesis that the differnce in means is equal to zero. The hypothesis test p-value is very small, so our results are significant in that there is a difference in means.
 
-The p-value again informs that our results are statistically significant and that
-we reject the null hypothesis.
+In examining the results we see that the values of the means we can see that there is a decrease in NDVI when comparing 2020 to 1990. This leads to the second hypothesis test of comparing the means in income.
 
-This relationship is not what we expected in that income increased from 1990 to 2020,
-but NDVI decreased.
+The p-value again informs that our results are statistically significant and that we reject the null hypothesis.
 
+This relationship is not what we expected in that income increased from 1990 to 2020, but NDVI decreased.
 :::
 
 # Region A VS D in 2020 {.smaller}
-Finally to answer our initial question we compare two different graded regions in 
-both their difference in NDVI and income.
-::: panel-tabset
-### Difference NDVI {.smaller}
+
+Finally to answer our initial question we compare two different graded regions in both their difference in NDVI and income. ::: panel-tabset \### Difference NDVI {.smaller}
 
 a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
 
@@ -378,27 +367,32 @@ t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='A'],ndvi_income_20$ndvi[n
 ```{r}
 t.test(ndvi_income_20$income[ndvi_income_20$holc_grade=='A'],ndvi_income_20$income[ndvi_income_20$holc_grade=='D'])
 ```
+
 ### Interpretation
 
-When it comes to NDVI the results are statistically significant as the p-value is
-very small. The mean is higher in a region graded A compared to a region graded D.
+When it comes to NDVI the results are statistically significant as the p-value is very small. The mean is higher in a region graded A compared to a region graded D.
 
-With regard to income and a p-value of 0.9 we fail to reject the null hypothesis that 
-there that the true difference of means is equal to zero at $\alpha =0.5$
+With regard to income and a p-value of 0.9 we fail to reject the null hypothesis that there that the true difference of means is equal to zero at $\alpha =0.5$
 
-I read this as that even though incomes have risen in regions in graded D to be 
-statistically indiscernible from regions graded A, there is a statistically significant 
-difference in greenness in the two regions and the greeness has decreased in D regions.
-:::
+I read this as that even though incomes have risen in regions in graded D to be statistically indiscernible from regions graded A, there is a statistically significant difference in greenness in the two regions and the greeness has decreased in D regions. :::
 
 # Conclusion
-The interpretations of the final hypothesis test tell us that there is a difference in 
-regions graded A versus D but that they do not follow with income. The p-value of 
-0.09 in the linear regression for grade suggest that grade alone is not a significant 
-indicator of NDVI but the interaction with income and its very low p-value that it
-should be considered. Further exploration of the relationship between incoming and grading 
-and NDVI should include more of the spatial component and conitnous data if possible.
-:::
+
+The interpretations of the final hypothesis test tell us that there is a difference in regions graded A versus D but that they do not follow with income. The p-value of 0.09 in the linear regression for grade suggest that grade alone is not a significant indicator of NDVI but the interaction with income and its very low p-value that it should be considered. Further exploration of the relationship between incoming and grading and NDVI should include more of the spatial component and conitnous data if possible. :::
+
+# Data and Code
+
+The data used for this project can be found here:
+
+[NDVI and Income by Census Tract](https://docs.google.com/spreadsheets/d/1zeXncD7mLWi63XAoNAohIlhKn7Mrr2NY/edit?usp=share_link&ouid=116846055995746038472&rtpof=true&sd=true "NDVI and Income by Census Tract")
+
+The code for processing this file is within this post source file:
+
+[NDVI in Redlined Regions](https://github.com/romero61/romero61.github.io/blob/7431938a1cc5e7a54e316fbd11dd7639f0a2319a/posts/stats_project/index.qmd "NDVI in Redlined Regions")
+
+OR the scratch repository used to create the in-class presentation:
+
+[Stats Presenstation](https://github.com/romero61/ndvi_redline_stats "Stats Presenstation")
 
 # References
 
@@ -410,5 +404,4 @@ Casey, J.A.; James, P.; Cushing, L.; Jesdale, B.M.; Morello-Frosch, R. Race, Eth
 
 https://romero61.github.io/posts/redlining_NDVI.html
 
-Schwarz, K., Fragkias, M., Boone, C.G., Zhou, W., McHale, M., Grove, J.M., O’Neil-Dunne, J., McFadden, J.P., Buckley, G.L., Childers, D., Ogden, L., Pincetl, S., Pataki, D., Whitmer, A. and Cadenasso, M.L. (2015). Trees Grow on Money: Urban Tree Canopy Cover and Environmental Justice. PLOS ONE, [online] 10(4), p.e0122051. doi:10.1371/journal.pone.0122051.
-
+Schwarz, K., Fragkias, M., Boone, C.G., Zhou, W., McHale, M., Grove, J.M., O'Neil-Dunne, J., McFadden, J.P., Buckley, G.L., Childers, D., Ogden, L., Pincetl, S., Pataki, D., Whitmer, A. and Cadenasso, M.L. (2015). Trees Grow on Money: Urban Tree Canopy Cover and Environmental Justice. PLOS ONE, \[online\] 10(4), p.e0122051. doi:10.1371/journal.pone.0122051.
