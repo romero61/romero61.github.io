@@ -1,6 +1,6 @@
 ---
-title: "NDVI in Redlined Regions"
-subtitle: "A statistical extension to previous work"
+title: "Statistical Analysis of NDVI in Redlined Regions"
+subtitle: "An extension to previous work"
 description: "Supplement to 'Analyzing Greenness through NDVI in Redlined areas in Philadelphia, Pennsylvania'"
 editor: visual
 date: "12/01/2022"
@@ -63,7 +63,11 @@ ndvi_income0 <- ndvi_income %>%
 #levels(ndvi_income$holc_grade)
 ```
 
-# HOCL 'Redlining' {.smaller}
+# Introduction
+
+In [ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PENNSYLVANIA](https://romero61.github.io/posts/redlining_NDVI/ "ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PENNSYLVANIA") the main focus was on applying the remote sensing skills developed through the course to be able to quantify and explore simple relationships between variables. Here I extend that previous work by applying statistical concepts learned in EDS 222 Statistics for Environmental Data Science.
+
+## HOCL 'Redlining'
 
 'Redlining' is the term used for the racist, nativist, and class privileged maps and its grading system created by the Home Owners Loan corporation (HOCL) under the New Deal federal stimulus program of 1935. These HOCL grades and maps were used by mortgage lenders for decades furthering racial segregation and a disparity in financial resources
 
@@ -75,82 +79,48 @@ C = Declining
 
 D = Hazardous
 
-• "Undesirable negro section of very poor property"
+Example of language used to describe region D: • "Undesirable negro section of very poor property"
 
 • "Concentration of undesirables. Low class whites and negro"
-
-# NDVI {.smaller}
 
 ::: panel-tabset
 ### Question
 
-How does NDVI change with income in redlined areas?
+Greenness or green space is reflective of many different measures of quality of life, such as health disparities, racial residential segregation and urban heat islands, noise pollution, air quality, and lower income.
 
-![](img/original_redline.png)
+Using NDVI as a measure of greenness, the question is: How does NDVI change with income in the graded regions A and D of redlined maps in Philadelphia, PA?
+
+![](img/original_redline.png){fig-align="center"}
 
 ### Data
 
--   Use NDVI as a measure for greenness and vegetation coverage.
+-   Calculate median NDVI for the years 1990, 2000, 2010, 2020 by U.S. census tract in each graded region.
 -   Median Income by tract from U.S. Census
 
-![](img/wrt.png){fig-align="center"}
+![](img/wrt.png){fig-align="center" width="382"}
 
-### Statistics
+### Analysis plan
 
--   OLS to examine if the relationship of income & grading on NDVI
--   Hypothesis testing comparing Mean NDVI based on grading
+-   Explore data
+-   OLS to examine if there is statisically significant relationship of income & grading on NDVI
+-   Hypothesis testing comparing Mean NDVI based on grading and year.
 
-![](img/areasandd.png){fig-align="center"}
+![](img/areasandd.png){fig-align="center" width="378"}
 :::
 
 # Data Exploration
 
-Check the X variable has variation
-
-```{r}
-#| echo: true
-var(ndvi_income0$income_mindiv2) != 0
-```
-
-# Data Exploration
-
 ::: panel-tabset
-### Boxplots
+### Scatteplot
+
+Two takeawys from this plot: 1. There are a significant amount of NDVI values with zero income, these are taken to be census tracts of open spaces. This interpretation does not mean address quality of the open space as they could be parks or abandoned lots.
+
+2.  There outliers for both regions A and D.
 
 ```{r}
 pal <- c('firebrick1','deepskyblue')
-income_box <- plot_ly(ndvi_income0, x = ~year, y =~income, color = ~holc_grade, type = 'box', colors = pal)
 
-ndvi_box <- plot_ly(ndvi_income0, x = ~year, y =~ndvi, color = ~holc_grade, type = 'box', colors = pal)
-
-
-subplot(income_box, ndvi_box) %>% 
-   layout(autosize = F)
-
-```
-
-### Histograms
-
-```{r}
-hist_income <- plot_ly(ndvi_income0, x = ~income, type = 'histogram', colors = pal ) 
-
-
-#hist(ndvi_income0$income)
-hist_ndvi <- plot_ly(ndvi_income0, x = ~ndvi, type = 'histogram', colors = pal)
-#hist(ndvi_income0$ndvi)
-
-hist_log_income <- plot_ly(ndvi_income0, x = ~income_log, color = ~holc_grade, type = 'histogram', colors = pal)
-
-hist_log_ndvi <- plot_ly(ndvi_income0, x = ~ndvi_log, color = ~holc_grade, type = 'histogram', colors = pal)
-subplot(hist_income, hist_ndvi, hist_log_income, hist_log_ndvi) %>% 
-   layout( autosize= F)
-```
-
-### Scatterplots
-
-```{r}
-
-fig <- plot_ly(data = ndvi_income0, x = ~income, y = ~ndvi,color = ~holc_grade, colors = pal,
+fig <- plot_ly(data = ndvi_income0, x = ~income, y = ~ndvi,color = ~holc_grade,height = 450, colors = pal,
                marker = list(size = 10,
                              line = list(color = 'rgba(0, 0, 0, 1)',
                                          width = 2)))
@@ -158,10 +128,50 @@ fig <- plot_ly(data = ndvi_income0, x = ~income, y = ~ndvi,color = ~holc_grade, 
 fig <- fig %>% layout(
          yaxis = list(zeroline = FALSE),
          xaxis = list(zeroline = FALSE))
+fig
+```
+
+### Boxplots
+
+The boxplots gives insight to the distribution of the two different regions for income and NDVI. The income median is always higher in regions graded A but region D has a greater shift towards higher values of income and outliers in 2020.
+
+```{r}
+income_box <- plot_ly(ndvi_income0, x = ~year, y =~income, color = ~holc_grade, type = 'box', colors = pal, height = 450) 
+
+ndvi_box <- plot_ly(ndvi_income0, x = ~year, y =~ndvi, color = ~holc_grade, type = 'box', colors = pal, height = 450) 
+
+subplot(income_box, ndvi_box ) %>%
+  config( scrollZoom = TRUE) %>% 
+  layout(title = "Income     NDVI")
+
+```
+
+### Histograms
+
+The first two distributions of income on the left and NDVI on the right indicate that a log-log transformation would be appropriate for the dataset. To perform a log-log transformation the zeros of income must be addressed. This being a spatial relationship simply removing did not seem appropriate, so the minimum value was found and divided in half replacing zeros in income.
+
+```{r}
+hist_income <- plot_ly(ndvi_income0, x = ~income, type = 'histogram', colors = pal, name = "Income" ) 
 
 
+#hist(ndvi_income0$income)
+hist_ndvi <- plot_ly(ndvi_income0, x = ~ndvi, type = 'histogram', colors = pal, height = 450, name = 'NDVI')
+#hist(ndvi_income0$ndvi)
 
-figlog <- plot_ly(data = ndvi_income0, x = ~income_log, y = ~ndvi_log,color = ~holc_grade, colors = pal,
+hist_log_income <- plot_ly(ndvi_income0, x = ~income_log, color = ~holc_grade, type = 'histogram', colors = pal, height = 450)
+
+hist_log_ndvi <- plot_ly(ndvi_income0, x = ~ndvi_log, color = ~holc_grade, type = 'histogram', colors = pal)
+subplot(hist_income, hist_ndvi, hist_log_income, hist_log_ndvi) %>% 
+   layout(title = 'Distribution and Log Ditribution of Income & NDVI')
+```
+
+### Log-Log Scatterplot
+
+The resulting log-log scatterplot after applying transformation and accounting for zeros.
+
+```{r}
+
+figlog <- plot_ly(data = ndvi_income0, x = ~income_log, y = ~ndvi_log,height = 450, color = ~holc_grade, colors = pal,
                marker = list(size = 10,
                              line = list(color = 'rgba(0, 0, 0, 1)',
                                          width = 2)))
@@ -170,37 +180,59 @@ figlog <- figlog %>% layout(
          yaxis = list(zeroline = FALSE),
          xaxis = list(zeroline = FALSE))
 
-subplot(fig, figlog) %>% 
-   layout( autosize = F)
+figlog
 ```
 :::
 
-# OLS Interaction Raw Data {.smaller}
-
-$$ \text{NDVI}_i = \beta_0 + \beta_1 \text{income}_i + \beta_2Grade + \beta_3income*Grade + \varepsilon_i $$
+Checking the OLS assumption that the X variable has variation.
 
 ```{r}
 #| echo: true
-mod <- lm(ndvi ~ income + holc_grade + income:holc_grade, data = ndvi_income0 )
+var(ndvi_income0$income_mindiv2) != 0
+```
 
+# Log-Log Ordinart Least Squares Regression
+
+::: panel-tabset
+### W/o interaction
+
+Our question is dependent on that we believe there is an interaction between income and grading resulting in different NDVI values. We first run the regression without the interaction to compare adjusted R-squared with the interaction.
+
+$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i  $$ 
+
+**ADJUSTED R-SQUARED**
+
+```{r}
+#| echo: true
+mod <- lm(ndvi_log ~ income_log, data = ndvi_income0 )
 summary(mod)$adj.r.squared
 
 ```
 
-# OLS log-log interaction {.smaller}
-
-$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i + \beta_2Grade + \beta_3log(income)*Grade + \varepsilon_i $$ Adjusted R-squared
-
 ```{r}
-#| echo: true
+summary(mod)
+```
+
+### W/ interaction
+
+$$ \text{log(NDVI)}_i = \beta_0 + \beta_1 \text{log(income)}_i + \beta_2Grade + \beta_3log(income)*Grade + \varepsilon_i $$ 
+
+A significant improved in **Adjusted R-squared** tells us adding the interaction of grade and income
+improves our model.
+```{r}
 mod0 <- lm(ndvi_log ~ income_log + holc_grade + income_log:holc_grade, data = ndvi_income0 )
 summary(mod0)$adj.r.squared
 ```
 
-# Residuals {.smaller}
 
-::: panel-tabset
-### Distribution
+```{r}
+#| echo: true
+summary(mod0)
+```
+
+### Residuals Distribution
+
+Using 30 bins the residuals are mostly normally distributed over zero with a slight left tail.
 
 ```{r}
 #| panel: fill
@@ -211,20 +243,43 @@ predictionslog <- ndvi_income0 %>%
   modelr::add_predictions(mod0) %>% 
   mutate(residuals = ndvi_log-pred)
 
-ggplot(predictionslog) + geom_histogram(aes(residuals), bins = 25)
+
+hist_res <- plot_ly(predictionslog, x = ~residuals, type = 'histogram', colors = pal, name = "Residuals", nbinsx = 30, alpha = 0.6, height = 450)
+hist_res <- hist_res %>% layout(barmode = "overlay", 
+                      yaxis = list(title = "Frequency"),
+                      xaxis = list(title = "Residuals"))
+
+hist_res
+
 
 ```
 
-### Variance {.smaller}
+### Residuals Variance
+
+As a whole there is some consistency in the distribution of the variance but when looked at as two distinct groups as picured here the distribution is much greater. This threathens assumption 4 of OLS,
 
 ```{r}
-ggplot(predictionslog) + geom_point(aes(x = income_log, y = residuals), size =2)
+#ggplot(predictionslog) + geom_point(aes(x = income_log, y = residuals), size =2)
+
+residual_scatter <- plot_ly(data = predictionslog, x = ~income_log, y = ~residuals,height = 450, color = ~holc_grade, colors = pal,
+               marker = list(size = 10,
+                             line = list(color = 'rgba(0, 0, 0, 1)',
+                                         width = 2)))
+
+residual_scatter <- residual_scatter %>% layout(
+         yaxis = list(zeroline = FALSE),
+         xaxis = list(zeroline = FALSE))
+
+residual_scatter
 ```
 :::
 
-# Coefficients {.smaller}
+# Interpretation of Coefficients {.smaller}
 
-$$ \text{log(NDVI)}_i = -0.170 + (-0.121) \text{log(income)}_i + (-0.729)Grade + (0.134)log(income)*Grade + \varepsilon_i $$
+::: panel-tabset
+### Coefficients {.smaller}
+
+$$ \small {log(NDVI)}_i = -0.170 + (-0.121){log(income)}_i + (-0.729)Grade + (0.134)log(income)*Grade + \varepsilon_i \small $$
 
 ```{r}
 lm(ndvi_log ~ income_log + holc_grade + income_log:holc_grade, data = ndvi_income0 ) %>% tidy() %>% 
@@ -237,7 +292,7 @@ For every 1% increase in the independent variable INCOME, our dependent variable
 
 The percentage of the impact of region grade on NDVI, is 42.07 higher in Region graded A than it is in region graded D.
 
-# Plot {.smaller}
+### Plot
 
 ```{r}
 income_percent <- round(exp(coef(mod0)["income_log"] - 1) * 100,2)
@@ -255,11 +310,12 @@ lm_plot <- ndvi_income0 |>
        y = "Median NDVI") 
 lm_plot
 ```
+:::
 
 # Hypothesis Testing {.smaller}
 
 ::: panel-tabset
-### Difference {.smaller}
+### Difference NDVI {.smaller}
 
 ```{r}
 ndvi_income_90 <- ndvi_income %>% 
@@ -272,21 +328,42 @@ ndvi_income_20 <- ndvi_income %>%
 
 a.  $$H_{0}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD} = 0 $$ $$H_{A}: \mu_{ndvi20gradeD} - \mu_{ndvi90gradeD}  \neq 0$$
 
+
+
 ```{r}
 t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[ndvi_income_90$holc_grade=='D'])
 ```
 
-### \<0 {.smaller}
+### Difference Income {.smaller}
+
+$$H_{0}: \mu_{Income20gradeD} - \mu_{Income90gradeD} = 0 $$ $$H_{A}: \mu_{Income20gradeD} - \mu_{Income90gradeD}  \neq 0$$
+ 
 
 ```{r}
-t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'],ndvi_income_90$ndvi[ndvi_income_90$holc_grade=='D'],alternative = 'less')
+t.test(ndvi_income_20$income[ndvi_income_20$holc_grade=='D'],ndvi_income_90$income[ndvi_income_90$holc_grade=='D'])
 ```
+### Interpretation
+We reject the null hypothesis that the differnce in means is equal to zero.
+The hypothesis test p-value is very small, so our results are significant in that
+there is a difference in means. 
+
+In examining the results we see that the values of the means we can see that there is a
+decrease in NDVI when comparing 2020 to 1990. This leads to the second hypothesis test
+of comparing the means in income. 
+
+The p-value again informs that our results are statistically significant and that
+we reject the null hypothesis.
+
+This relationship is not what we expected in that income increased from 1990 to 2020,
+but NDVI decreased.
+
 :::
 
 # Region A VS D in 2020 {.smaller}
-
+Finally to answer our initial question we compare two different graded regions in 
+both their difference in NDVI and income.
 ::: panel-tabset
-### Difference {.smaller}
+### Difference NDVI {.smaller}
 
 a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
 
@@ -296,12 +373,31 @@ a.  $$H_{0}: \mu_{ndvi20gradeA} - \mu_{ndvi20gradeD} = 0 $$
 t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='A'],ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'])
 ```
 
-### \>0 {.smaller}
+### Difference Income {.smaller}
 
 ```{r}
-t.test(ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='A'],ndvi_income_20$ndvi[ndvi_income_20$holc_grade=='D'], alternative = 'greater')
+t.test(ndvi_income_20$income[ndvi_income_20$holc_grade=='A'],ndvi_income_20$income[ndvi_income_20$holc_grade=='D'])
 ```
+### Interpretation
+
+When it comes to NDVI the results are statistically significant as the p-value is
+very small. The mean is higher in a region graded A compared to a region graded D.
+
+With regard to income and a p-value of 0.9 we fail to reject the null hypothesis that 
+there that the true difference of means is equal to zero at $\alpha =0.5$
+
+I read this as that even though incomes have risen in regions in graded D to be 
+statistically indiscernible from regions graded A, there is a statistically significant 
+difference in greenness in the two regions and the greeness has decreased in D regions.
 :::
+
+# Conclusion
+The interpretations of the final hypothesis test tell us that there is a difference in 
+regions graded A versus D but that they do not follow with income. The p-value of 
+0.09 in the linear regression for grade suggest that grade alone is not a significant 
+indicator of NDVI but the interaction with income and its very low p-value that it
+should be considered. Further exploration of the relationship between incoming and grading 
+and NDVI should include more of the spatial component and conitnous data if possible.
 
 # References
 
@@ -312,3 +408,6 @@ Nardone, Anthony, et al. "Redlines and Greenspace: The Relationship between Hist
 Casey, J.A.; James, P.; Cushing, L.; Jesdale, B.M.; Morello-Frosch, R. Race, Ethnicity, Income Concentration and 10-Year Change in Urban Greenness in the United States. Int. J. Environ. Res. Public Health 2017, 14, 1546, doi.org/10.3390/ijerph14121546
 
 https://romero61.github.io/posts/redlining_NDVI.html
+
+Schwarz, K., Fragkias, M., Boone, C.G., Zhou, W., McHale, M., Grove, J.M., O’Neil-Dunne, J., McFadden, J.P., Buckley, G.L., Childers, D., Ogden, L., Pincetl, S., Pataki, D., Whitmer, A. and Cadenasso, M.L. (2015). Trees Grow on Money: Urban Tree Canopy Cover and Environmental Justice. PLOS ONE, [online] 10(4), p.e0122051. doi:10.1371/journal.pone.0122051.
+
