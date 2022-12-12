@@ -152,12 +152,11 @@ aug_complex = MTBS.filter(ee.Filter.eq('Incid_Name', 'AUGUST COMPLEX'));
 
 ```{python}
 MapB = geemap.Map(center=[39.9, -122.9], zoom=8.7)
-
+MapB
 ```
 
 ```{python}
 MapB.addLayer(aug_complex, {}, "August Complex Boundary")
-MapB
 #Map.centerObject(selected_counties, zoom = 9);
 #Map.remove_ee_layer('Boundaries')
 ```
@@ -220,21 +219,20 @@ Set up parameters for true color images using band 2, 3, and 4 from the Sentinel
 ```{python}
 #visualization parameters for true color images
 vis = {'bands': ['B4', 'B3', 'B2'], 'max': 2000, 'gamma': 1.5};
-MapT = geemap.Map(center=[39.9, -109], zoom=6.49)
-
-# Add the true color images to the map.
-MapT.addLayer(pre_mos, vis,'Pre-fire image');
-MapT.addLayer(post_mos, vis,'Post-fire image');
-```
-
-```{python}
-#Add the true color images to the map.
-MapT.addLayer(pre_cm_mos, vis,'Pre-fire True Color Image - Clouds masked');
-MapT.addLayer(post_cm_mos, vis,'Post-fire True Color Image - Clouds masked');
+MapT = geemap.Map(center=[39.9, -122.9], zoom=8.7)
 MapT
 ```
 
+```{python}
+# Add the true color images to the map.
+MapT.addLayer(pre_mos, vis,'Pre-fire image');
+MapT.addLayer(post_mos, vis,'Post-fire image');
+#Add the true color images to the map.
+MapT.addLayer(pre_cm_mos, vis,'Pre-fire True Color Image - Clouds masked');
+MapT.addLayer(post_cm_mos, vis,'Post-fire True Color Image - Clouds masked');
+```
 
+ 
 # Use Case Example 
 
 For our use case, we wanted to use Sentinel data to understand how severe the August Complex fire was in 2020. We will use the Sentinel data to calculate the NBR and dNBR of the fire. It lasted from August 16th to November 12th, and it burned over a million acres accross multiple national parks - largely in the Mendocino National Forest. 
@@ -247,14 +245,14 @@ The Normalized Burn Ratio (NBR) is the ratio between NIR and SWIR, as shown by t
 
  
 
-![image.png](attachment:2c76254c-5c31-4df0-a9f5-f1df9f2d5a42.png)
+![image.png](img/nbreqn.png)
 
 
 The Normalized Burn Ratio (NBR) is used to highlight burned areas and estimate burn severity, using near-infrared (NIR) and shortwave-infrared (SWIR) wavelengths.  Healthy vegetation has very high NIR reflectance and low SWIR. Recently burned areas have a low NIR reflectance and high SWIR reflectance.
 
 The spectral response curves of healthy vegetation versus burned vegetation is shown below. Since the two reach peak differences in the NIR and SWIR wavelengths, we can calculate the ratio of this difference to focus on where the August Complex fire burned.
 
-![image.png](attachment:374d069c-0207-4bf7-89ab-e2de1f4126ee.png)
+![image.png](img/nbrcurve.png)
 
 
 Preparing pre-fire and post-fire Normalized Burn Ratio (NBR) images:
@@ -280,12 +278,12 @@ Maps
 
 ## Adding Burn Severity map with levels of severity
 
-![image.png](attachment:f20af77e-0ec1-491f-bf7b-6b16b1a46353.png)
+![image.png](img/dnbreqn.png)
 
 A higher value of dNBR indicates more severe damage, while areas with negative dNBR values may indicate regrowth following a fire.
 
 Table 1. Burn severity levels obtained calculating dNBR, proposed by USGS.
-![image.png](attachment:6a661807-900d-4567-a5ba-bf162e0f5414.png)
+![image.png](img/dnbrclass.png)
 
 ```{python}
 dNBR_unscaled = preNBR.subtract(postNBR);
@@ -296,7 +294,10 @@ dNBR = dNBR_unscaled.multiply(1000);
 
 ```{python}
 Map2 = geemap.Map(center=[39.9, -122.9], zoom=8.7)
+Map2
+```
 
+```{python}
 Map2.add_basemap('SATELLITE')
 ```
 
@@ -327,7 +328,6 @@ legend_dict = {
 
 
 Map2.add_legend(legend_title = "dNBR Classes", legend_dict = legend_dict)
-Map2
 ```
 
 ```{python}
@@ -447,7 +447,7 @@ df_stats = pd.DataFrame(stats).set_index('Class')
 df_stats
 ```
 
-
+<a id='Use_Case_Discussion'></a>
 ### Use Case Discussion
 
 We found that nearly half of the burned area was determined to be between Moderate-Low to High severity. Additionally, the High severity area was the second largest percentage of area classified.
@@ -466,14 +466,14 @@ df_stats.plot(kind = 'pie', y = 'Percentage',
 plt.title('Burn Severity Analysis of 2020 August Complex Fire')
 ```
 
-
+<a id='Future_Analyses'></a>
 ### Future Analyses
 
 With more time, the data extracted could be analyzed with other characteristics of the environment, such as slope, aspect, wind direction, and humidity. These analyses would better inform wildfire researchers the nature of fires, how they spread, and what characteristics increase severity.
 
 Additionally, this burn severity map can be compared to other wildfire burn severity maps as a function of time to see if the severity of the burns is getting worse. This would help inform wildfire researchers determine how quickly fires are increasingly negatively affecting the environment. Burn severity can also be compared temporally so that wildfire prevention can be implemented to the parts of the state most at risk. 
 
-
+<a id='references'></a> 
 ### References
 
 - Sentinel data GEE page: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2 
