@@ -1,56 +1,60 @@
 ---
+title: "Burn Severity with Sentinel-2 data using Google Earth Engine"
+description: 'Python Work from Jupyter Notebook'
+editor: visual
 jupyter: gee_env
 ---
 
-# Burn Severity  with Sentinel-2 data using Google Earth Engine
+THIS POST IS TO SHOWCASE SOME PYTHON WORK DONE IN JUPYTER NOTEBOOK. CONVERTING TO QUARTO HAS CAUSED SOME INCOMPATABILITY SO SCREENSHOTS HAVE BEEN ADDED OF MAPS. ORIGINAL JUPYTER REPOSITORY CAN BE FOUND AT [romero61/eds220-burn-scar-analysis: EDS 220 final group project (github.com)](https://github.com/romero61/eds220-burn-scar-analysis)
+
 In this Jupyter Notebook, we first visualize true color images of the August Complex fire before and after it burned. Bands from the Sentinel 2 satellites as well as a dataset from USFS with wildfire boundaries are used for our analysis. Then, the Normalized Burn Ratio (NBR) is used to analyze burn severity, which is a measure of the degree to which a fire has affected the ecosystem. To compare these two images, we will compute the normalized difference to show where burn severity most significantly affected the vegetation and soil. We then added a scale to the normalized difference to show the levels of burn severity from the August Complex fire. Finally, we visualized the levels of severity to show the overall intensity. This link provides more information on the Sentinel 2 dataset that was used: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2.
 
 ### Authors
-- Guillermo Romero, Bren School of Environmental Science & Management, UCSB (romero61@ucsb.edu)
-- Wade Sedgewick, Bren School of Environmental Science & Management, UCSB (wsedgwick@ucsb.edu)
-- Hailey Veirs, Bren School of Environmental Science & Management, UCSB (hveirs@ucsb.edu)
+
+-   Guillermo Romero, Bren School of Environmental Science & Management, UCSB (romero61\@ucsb.edu)
+-   Wade Sedgewick, Bren School of Environmental Science & Management, UCSB (wsedgwick\@ucsb.edu)
+-   Hailey Veirs, Bren School of Environmental Science & Management, UCSB (hveirs\@ucsb.edu)
 
 ### Table of Contents
 
-1. [Purpose](#Purpose)
-2. [Dataset Description](#Dataset_Description)
-3. [Data I/O](#Data_I/O)
-4. [Metadata Display](#Metadata_Display)
-5. [True Color Visualization](#True_Color_Visualization)
-6. [Use Case Examples](#Use_Case_Examples)
-7. [Use Case Discussion](#Use_Case_Discussion)
-8. [References](#References)
-
+1.  [Purpose](#Purpose)
+2.  [Dataset Description](#Dataset_Description)
+3.  [Data I/O](#Data_I/O)
+4.  [Metadata Display](#Metadata_Display)
+5.  [True Color Visualization](#True_Color_Visualization)
+6.  [Use Case Examples](#Use_Case_Examples)
+7.  [Use Case Discussion](#Use_Case_Discussion)
+8.  [References](#References)
 
 # Notebook Purpose
-Wildfires in California are becoming increasingly straining on the environment as well as the millions of people living in the state. As the world struggles to deal with climate change and droughts in the West, California must be proactive at addressing this threat. This notebook aims at visualizing the severity of the August Complex fire, the largest wildfire by area in California’s history. This fire began on August 16th and wasn’t contained until November 12th. California’s 7 biggest wildfires have all occurred in the past 5 years as California becomes a more draught-prone state, which means that this problem will only get worse. The wildfire started from multiple lightning strikes that resulted in 13 separate fires, and over the following week, they quickly joined to form the August Fire, which lasted just under three months.
 
-To visualize the severity of the August Complex fire, we will do an analysis of the difference Normalized Burn Ratio (dNBR). Sentinel 2, the satellites used for Europe’s Earth observation program, will be used to conduct this analysis. The dNBR is an analysis on quantifying the damage that the fire had on the ecosystem. The NBR before and after the fires is first calculated. We use these images to calculate the dNBR, which shows the difference in burn severity. With Sentinel’s Visible and Near Infrared (VNIR) and Shortwave Infrared (SWIR) bands at 20 meter resolution, we are able to visualize the severity of the largest wildlife in California. Lastly, we display the proportion of level of severity, showing how detrimental it was to the environment.
+Wildfires in California are becoming increasingly straining on the environment as well as the millions of people living in the state. As the world struggles to deal with climate change and droughts in the West, California must be proactive at addressing this threat. This notebook aims at visualizing the severity of the August Complex fire, the largest wildfire by area in California's history. This fire began on August 16th and wasn't contained until November 12th. California's 7 biggest wildfires have all occurred in the past 5 years as California becomes a more draught-prone state, which means that this problem will only get worse. The wildfire started from multiple lightning strikes that resulted in 13 separate fires, and over the following week, they quickly joined to form the August Fire, which lasted just under three months.
 
+To visualize the severity of the August Complex fire, we will do an analysis of the difference Normalized Burn Ratio (dNBR). Sentinel 2, the satellites used for Europe's Earth observation program, will be used to conduct this analysis. The dNBR is an analysis on quantifying the damage that the fire had on the ecosystem. The NBR before and after the fires is first calculated. We use these images to calculate the dNBR, which shows the difference in burn severity. With Sentinel's Visible and Near Infrared (VNIR) and Shortwave Infrared (SWIR) bands at 20 meter resolution, we are able to visualize the severity of the largest wildlife in California. Lastly, we display the proportion of level of severity, showing how detrimental it was to the environment.
 
 # Dataset Description
+
 **Sentinel 2**
 
-The dataset we will be using is the Sentinel 2 which was collected and distributed by Copernicus, Europe’s Earth observation program. Sentinel 2 uses two separate satellites for increased temporal resolution. These satellites focus on terrestrial monitoring, whereas Sentinel 1 aims at capturing imagery of both marine and terrestrial areas. The Sentinel 2 satellites focus on monitoring coasts, vegetation and soil.
+The dataset we will be using is the Sentinel 2 which was collected and distributed by Copernicus, Europe's Earth observation program. Sentinel 2 uses two separate satellites for increased temporal resolution. These satellites focus on terrestrial monitoring, whereas Sentinel 1 aims at capturing imagery of both marine and terrestrial areas. The Sentinel 2 satellites focus on monitoring coasts, vegetation and soil.
 
 **Resolution**
 
-The Sentinel 2 satellites collect 13 separate bands. Sentinel 2A was launched June, 2015 and Sentinel 2B was launched March, 2017. Because the Sentinel 2 program comprises of two satellites that rotate the earth every 10 days, an entire cycle is completed in only five days. This increased temporal resolution is more than three times higher than Landsat 8. This is due to the focus on land and near-shore monitoring. The Sentinel satellites collect 13 separate bands: the visible bands have a resolution of 10 meters, five 20 meter and one 10 meter Visible and Near Infrared bands, two 60 meter and two 20-meter Shortwave Infrared bands, and one 60 meter Ultra Blue band (for coastal sediment and aerosols). We will be using a 20-meter NIR band as well as a 20-meter SWIR band for our dNBR analysis. 
+The Sentinel 2 satellites collect 13 separate bands. Sentinel 2A was launched June, 2015 and Sentinel 2B was launched March, 2017. Because the Sentinel 2 program comprises of two satellites that rotate the earth every 10 days, an entire cycle is completed in only five days. This increased temporal resolution is more than three times higher than Landsat 8. This is due to the focus on land and near-shore monitoring. The Sentinel satellites collect 13 separate bands: the visible bands have a resolution of 10 meters, five 20 meter and one 10 meter Visible and Near Infrared bands, two 60 meter and two 20-meter Shortwave Infrared bands, and one 60 meter Ultra Blue band (for coastal sediment and aerosols). We will be using a 20-meter NIR band as well as a 20-meter SWIR band for our dNBR analysis.
 
 **File Format & Data Retrieval**
 
 The data format for Sentinel 2 are ImageCollections, which are a collection of all images as individual bands taken by Sentinel 2A and 2B over their lifetimes. For our analysis, we used Google Earth Engine.
 
-**Limitations** 
+**Limitations**
 
-The Sentinel 2 satellites have been in orbit for five and seven years, providing highly temporal and decently spatial resolution. However, there are some limitations in using the data. The most prominent is cloud coverage, which affects how much of the earth a satellite can record. Although trends can show where cloud coverage might be more difficult to work around, the randomness and frequency of clouds interfering with imagery collection can mean that researchers do not have access to satellite imagery at a certain date. Additionally, although 10 meters is an improvement to the 30-meter Landsat visible bands, this is still not at a resolution for spatially detailed analysis such as individual tree identification. 
+The Sentinel 2 satellites have been in orbit for five and seven years, providing highly temporal and decently spatial resolution. However, there are some limitations in using the data. The most prominent is cloud coverage, which affects how much of the earth a satellite can record. Although trends can show where cloud coverage might be more difficult to work around, the randomness and frequency of clouds interfering with imagery collection can mean that researchers do not have access to satellite imagery at a certain date. Additionally, although 10 meters is an improvement to the 30-meter Landsat visible bands, this is still not at a resolution for spatially detailed analysis such as individual tree identification.
 
 **MTBS Polygon Data**
 
-We will also use the US Forest Service's Monitoring Trends in Burned Severity (MTBS) shapefiles with the Sentinel data. The data is made of shapefiles with several other saved variables such as the acerage of burned area, latitude longitude, ignition date, and dNBR values over certain thresholds. These shapefiles are delineated from Landsat imagery and burn severity index data at a map scale of 1:24,000 to 1:50,000. Additionally, all vector data is in Albers Equal Area projection. 
+We will also use the US Forest Service's Monitoring Trends in Burned Severity (MTBS) shapefiles with the Sentinel data. The data is made of shapefiles with several other saved variables such as the acerage of burned area, latitude longitude, ignition date, and dNBR values over certain thresholds. These shapefiles are delineated from Landsat imagery and burn severity index data at a map scale of 1:24,000 to 1:50,000. Additionally, all vector data is in Albers Equal Area projection.
 
-For this notebook, we will be using the polygon geometry to help subset our Sentinel data to the burned area. Although the MTBS vector data includes high to low burn severity threshold data, it only includes the value that each threshold was determined as, not the area values that correspond to each threshold. Luckily, we can still use the vector data in our case example. 
-
+For this notebook, we will be using the polygon geometry to help subset our Sentinel data to the burned area. Although the MTBS vector data includes high to low burn severity threshold data, it only includes the value that each threshold was determined as, not the area values that correspond to each threshold. Luckily, we can still use the vector data in our case example.
 
 # Data Input/Output
 
@@ -155,13 +159,15 @@ MapB = geemap.Map(center=[39.9, -122.9], zoom=8.7)
 MapB
 ```
 
+![image.png](img/aug.png)
+
 ```{python}
 MapB.addLayer(aug_complex, {}, "August Complex Boundary")
 #Map.centerObject(selected_counties, zoom = 9);
 #Map.remove_ee_layer('Boundaries')
 ```
 
-The code below is outlining and saving time frames before the start of the fire and after the end of the fire. We chose to do ~15 day timeframes because the Sentinel satellite images are taken approximately every 5 days. The ~15 day timeframe means that we will hopefully have 2-3 images to use in our analysis.
+The code below is outlining and saving time frames before the start of the fire and after the end of the fire. We chose to do \~15 day timeframes because the Sentinel satellite images are taken approximately every 5 days. The \~15 day timeframe means that we will hopefully have 2-3 images to use in our analysis.
 
 ```{python}
 # Start of fire August 16
@@ -201,7 +207,7 @@ prefire_CM_ImCol = prefireImCol.map(maskS2sr);
 postfire_CM_ImCol = postfireImCol.map(maskS2sr);
 ```
 
-The code below creates a mosaic of images if our polygon includes the boundaries between images. It creates and saves one continuous image instead of multiple images. 
+The code below creates a mosaic of images if our polygon includes the boundaries between images. It creates and saves one continuous image instead of multiple images.
 
 ```{python}
 # If multiple images in area creates mosaic and clips otherwise only clips
@@ -215,6 +221,8 @@ post_cm_mos = postfire_CM_ImCol.mosaic().clip(aug_complex);
 ```
 
 Set up parameters for true color images using band 2, 3, and 4 from the Sentinel satellites, and adding non-cloud masked pre-fire and post-fire images and cloud masked pre-fire and post-fire images
+
+![image.png](img/true.png)
 
 ```{python}
 #visualization parameters for true color images
@@ -232,28 +240,21 @@ MapT.addLayer(pre_cm_mos, vis,'Pre-fire True Color Image - Clouds masked');
 MapT.addLayer(post_cm_mos, vis,'Post-fire True Color Image - Clouds masked');
 ```
 
- 
-# Use Case Example 
+# Use Case Example
 
-For our use case, we wanted to use Sentinel data to understand how severe the August Complex fire was in 2020. We will use the Sentinel data to calculate the NBR and dNBR of the fire. It lasted from August 16th to November 12th, and it burned over a million acres accross multiple national parks - largely in the Mendocino National Forest. 
- 
+For our use case, we wanted to use Sentinel data to understand how severe the August Complex fire was in 2020. We will use the Sentinel data to calculate the NBR and dNBR of the fire. It lasted from August 16th to November 12th, and it burned over a million acres accross multiple national parks - largely in the Mendocino National Forest.
 
 ## NBRs in greyscale
 
-
 The Normalized Burn Ratio (NBR) is the ratio between NIR and SWIR, as shown by the equation below:
-
- 
 
 ![image.png](img/nbreqn.png)
 
-
-The Normalized Burn Ratio (NBR) is used to highlight burned areas and estimate burn severity, using near-infrared (NIR) and shortwave-infrared (SWIR) wavelengths.  Healthy vegetation has very high NIR reflectance and low SWIR. Recently burned areas have a low NIR reflectance and high SWIR reflectance.
+The Normalized Burn Ratio (NBR) is used to highlight burned areas and estimate burn severity, using near-infrared (NIR) and shortwave-infrared (SWIR) wavelengths. Healthy vegetation has very high NIR reflectance and low SWIR. Recently burned areas have a low NIR reflectance and high SWIR reflectance.
 
 The spectral response curves of healthy vegetation versus burned vegetation is shown below. Since the two reach peak differences in the NIR and SWIR wavelengths, we can calculate the ratio of this difference to focus on where the August Complex fire burned.
 
 ![image.png](img/nbrcurve.png)
-
 
 Preparing pre-fire and post-fire Normalized Burn Ratio (NBR) images:
 
@@ -263,7 +264,7 @@ postNBR = post_cm_mos.normalizedDifference(['B8', 'B12']);
 ```
 
 ## Creating an interactive map of pre-fire and post-fire NBRs
-
+![image.png](img/split.png)
 ```{python}
 #Burn Ratio Product - Greyscale
 grey = ['white', 'black'];
@@ -282,8 +283,7 @@ Maps
 
 A higher value of dNBR indicates more severe damage, while areas with negative dNBR values may indicate regrowth following a fire.
 
-Table 1. Burn severity levels obtained calculating dNBR, proposed by USGS.
-![image.png](img/dnbrclass.png)
+Table 1. Burn severity levels obtained calculating dNBR, proposed by USGS. ![image.png](img/dnbrclass.png)
 
 ```{python}
 dNBR_unscaled = preNBR.subtract(postNBR);
@@ -291,6 +291,9 @@ dNBR_unscaled = preNBR.subtract(postNBR);
 #Scale product to USGS standards
 dNBR = dNBR_unscaled.multiply(1000);
 ```
+
+
+![image.png](img/class.png)
 
 ```{python}
 Map2 = geemap.Map(center=[39.9, -122.9], zoom=8.7)
@@ -447,8 +450,7 @@ df_stats = pd.DataFrame(stats).set_index('Class')
 df_stats
 ```
 
-<a id='Use_Case_Discussion'></a>
-### Use Case Discussion
+<a id='Use_Case_Discussion'></a> \### Use Case Discussion
 
 We found that nearly half of the burned area was determined to be between Moderate-Low to High severity. Additionally, the High severity area was the second largest percentage of area classified.
 
@@ -466,18 +468,15 @@ df_stats.plot(kind = 'pie', y = 'Percentage',
 plt.title('Burn Severity Analysis of 2020 August Complex Fire')
 ```
 
-<a id='Future_Analyses'></a>
-### Future Analyses
+<a id='Future_Analyses'></a> \### Future Analyses
 
 With more time, the data extracted could be analyzed with other characteristics of the environment, such as slope, aspect, wind direction, and humidity. These analyses would better inform wildfire researchers the nature of fires, how they spread, and what characteristics increase severity.
 
-Additionally, this burn severity map can be compared to other wildfire burn severity maps as a function of time to see if the severity of the burns is getting worse. This would help inform wildfire researchers determine how quickly fires are increasingly negatively affecting the environment. Burn severity can also be compared temporally so that wildfire prevention can be implemented to the parts of the state most at risk. 
+Additionally, this burn severity map can be compared to other wildfire burn severity maps as a function of time to see if the severity of the burns is getting worse. This would help inform wildfire researchers determine how quickly fires are increasingly negatively affecting the environment. Burn severity can also be compared temporally so that wildfire prevention can be implemented to the parts of the state most at risk.
 
-<a id='references'></a> 
-### References
+<a id='references'></a> \### References
 
-- Sentinel data GEE page: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2 
-- USFS MTBS Shapefile GEE page: https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description 
-- MTBS Project Page: https://www.mtbs.gov/ 
-- Step by Step: Burn Severity mapping in Google Earth Engine https://code.earthengine.google.com/b455ba8cf4b5bee822bb7ff8935e6209
-
+-   Sentinel data GEE page: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2
+-   USFS MTBS Shapefile GEE page: https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description
+-   MTBS Project Page: https://www.mtbs.gov/
+-   Step by Step: Burn Severity mapping in Google Earth Engine https://code.earthengine.google.com/b455ba8cf4b5bee822bb7ff8935e6209
