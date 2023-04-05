@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.37">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -66,22 +71,27 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="./index.html">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Environmental Data Science</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html">Home</a>
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html">Projects</a>
+    <a class="nav-link" href="./projects.html">
+ <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./resume.html" aria-current="page">resume</a>
+    <a class="nav-link active" href="./resume.html" aria-current="page">
+ <span class="menu-text">resume</span></a>
   </li>  
 </ul>
               <div class="quarto-toggle-container">
@@ -97,7 +107,7 @@ ul.task-list{list-style: none;}
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -106,14 +116,17 @@ ul.task-list{list-style: none;}
   <li><a href="#master-of-environmental-data-science" id="toc-master-of-environmental-data-science" class="nav-link" data-scroll-target="#master-of-environmental-data-science"><strong>Master of Environmental Data Science</strong></a></li>
   <li><a href="#bachelor-of-science-in-earth-science-geohydrology-emphasis" id="toc-bachelor-of-science-in-earth-science-geohydrology-emphasis" class="nav-link" data-scroll-target="#bachelor-of-science-in-earth-science-geohydrology-emphasis"><strong>Bachelor of Science in Earth Science – Geohydrology Emphasis</strong></a></li>
   <li><a href="#bachelor-of-arts-in-geography-geographic-information-systems-gis-emphasis" id="toc-bachelor-of-arts-in-geography-geographic-information-systems-gis-emphasis" class="nav-link" data-scroll-target="#bachelor-of-arts-in-geography-geographic-information-systems-gis-emphasis"><strong>Bachelor of Arts in Geography – Geographic Information Systems (GIS) Emphasis</strong></a></li>
-  <li><a href="#additional-education" id="toc-additional-education" class="nav-link" data-scroll-target="#additional-education">Additional Education</a></li>
   </ul></li>
   <li><a href="#skills" id="toc-skills" class="nav-link" data-scroll-target="#skills">SKILLS</a>
   <ul class="collapse">
-  <li><a href="#projects" id="toc-projects" class="nav-link" data-scroll-target="#projects">PROJECTS</a>
+  <li><a href="#masters-capstone-project---informing-forest-conservation-regulations-in-paraguay-122present" id="toc-masters-capstone-project---informing-forest-conservation-regulations-in-paraguay-122present" class="nav-link" data-scroll-target="#masters-capstone-project---informing-forest-conservation-regulations-in-paraguay-122present">Master’s Capstone Project - Informing Forest Conservation Regulations in Paraguay (1/22–Present)</a></li>
+  <li><a href="#geospatial-data-science-projects" id="toc-geospatial-data-science-projects" class="nav-link" data-scroll-target="#geospatial-data-science-projects">GEOSPATIAL &amp; DATA SCIENCE PROJECTS</a>
   <ul class="collapse">
-  <li><a href="#analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa" id="toc-analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa" class="nav-link" data-scroll-target="#analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa">ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PA</a></li>
+  <li><a href="#burn-severity-with-sentinel-2-data-using-google-earth-engine-working-with-environmental-data-1222" id="toc-burn-severity-with-sentinel-2-data-using-google-earth-engine-working-with-environmental-data-1222" class="nav-link" data-scroll-target="#burn-severity-with-sentinel-2-data-using-google-earth-engine-working-with-environmental-data-1222">Burn Severity with Sentinel-2 data using Google Earth Engine | Working with Environmental Data (12/22)</a></li>
+  <li><a href="#statistical-analysis-of-ndvi-in-redlined-regions-statistics-for-environmental-data-science-1122" id="toc-statistical-analysis-of-ndvi-in-redlined-regions-statistics-for-environmental-data-science-1122" class="nav-link" data-scroll-target="#statistical-analysis-of-ndvi-in-redlined-regions-statistics-for-environmental-data-science-1122">Statistical Analysis of NDVI in Redlined Regions | Statistics for Environmental Data Science (11/22)</a></li>
+  <li><a href="#analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa-undergraduate-thesis-422622" id="toc-analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa-undergraduate-thesis-422622" class="nav-link" data-scroll-target="#analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa-undergraduate-thesis-422622">Analyzing Greenness through NDVI in Redlined areas in Philadelphia, PA | Undergraduate Thesis (4/22–6/22)</a></li>
   <li><a href="#logistics-experience" id="toc-logistics-experience" class="nav-link" data-scroll-target="#logistics-experience">Logistics Experience</a></li>
+  <li><a href="#additional-education" id="toc-additional-education" class="nav-link" data-scroll-target="#additional-education">Additional Education</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#certifications" id="toc-certifications" class="nav-link" data-scroll-target="#certifications">CERTIFICATIONS</a></li>
@@ -133,6 +146,7 @@ ul.task-list{list-style: none;}
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -162,20 +176,8 @@ ul.task-list{list-style: none;}
 <p>Highlighted Coursework:</p>
 <p>Remote Sensing- Advanced image processing, including data fusion and resampling techniques, atmospheric corrections, global navigation satellite systems, and hyperspatial sensors with emphasis on applications.</p>
 <p>Ocean Remote Sensing- Physical principles and tools required for processing active and passive remote sensing data for coastal and ocean applications. Topics include remote sensing of phytoplankton, sea surface temperature, ocean winds and currents, and sea ice. Lab includes analysis of optical, thermal infrared, passive microwave, and radar data.</p>
-<p>Awarded UCSB Scholarship</p>
+<p>Awarded UCSB Scholarship, Outstanding Achievement in the Geography Major</p>
 </blockquote>
-</section>
-<section id="additional-education" class="level3">
-<h3 class="anchored" data-anchor-id="additional-education">Additional Education</h3>
-<section id="el-camino-community-college" class="level6">
-<h6 class="anchored" data-anchor-id="el-camino-community-college">El Camino Community College</h6>
-<p>(June 2020)</p>
-<p>El Camino College Foundation - Scholarship</p>
-<p>Associate of Science in Physics for Transfer</p>
-<p>Associate of Science in Mathematics for Transfer</p>
-<p>Associate of Science in General Science – Honors</p>
-<p>Associate of Arts in General Arts - Honors Associate of Arts in General Studies Biology and Physical Science</p>
-</section>
 </section>
 </section>
 <section id="skills" class="level1">
@@ -183,18 +185,33 @@ ul.task-list{list-style: none;}
 <hr>
 <p><strong>Languages</strong>: Spanish, R (tidyverse), Python (Pandas, Scipy), Markdown, SQL, MATLAB</p>
 <p><strong>Environments</strong>: RStudio, Quarto, ArcPro, Qgis, Vscode, Jupyter Lab</p>
-<p><strong>Technical</strong>: Exploratory Data Analysis, Data Visualization, Machine Learning</p>
-<section id="projects" class="level2">
-<h2 class="anchored" data-anchor-id="projects">PROJECTS</h2>
-<section id="analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa" class="level3">
-<h3 class="anchored" data-anchor-id="analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa">ANALYZING GREENNESS THROUGH NDVI IN REDLINED AREAS IN PHILADELPHIA, PA</h3>
-<p>(4/22–6/22)</p>
-<section id="undergraduate-poster-presentation-role-team-lead" class="level6">
-<h6 class="anchored" data-anchor-id="undergraduate-poster-presentation-role-team-lead">Undergraduate Poster Presentation Role: Team Lead</h6>
-<p>• Pre-processing (crop, mask, reclassify, NDVI calculation) of Landsat 8 OLI satellite data through Rstudio</p>
-<p>• Qgis processing of NDVI raster calculations, zonal statistics and write memory function.</p>
-<p>• Exploratory data analysis of U.S. Census median income data, NDVI data, and HOCL Redline data combined and processed through RStudio, Qgis and Excel.</p>
+<p><strong>Technical</strong>: Exploratory Data Analysis (EDA), Data Visualization, Machine Learning,Technical Writing of Environmental Field Work</p>
+<section id="masters-capstone-project---informing-forest-conservation-regulations-in-paraguay-122present" class="level2">
+<h2 class="anchored" data-anchor-id="masters-capstone-project---informing-forest-conservation-regulations-in-paraguay-122present">Master’s Capstone Project - Informing Forest Conservation Regulations in Paraguay (1/22–Present)</h2>
+<p>Client: Paraguay National Forest Institute; Dr.&nbsp;Robert Heilmayr | Role: Machine Learning Engineer</p>
+<p>• Utilized geospatial overlays to assess the compliance of property owners’ execution of approved land use plans (LUPs) and calculate land use types and percent of clearing.</p>
+<p>• Created a law-based simulation tool in R to evaluate the effects of current and alternate laws on conserved forest area in the undeveloped Chaco region.</p>
+<p>• Trained a convolutional neural network in Python to predict future deforestation patterns based on historic deforestation patterns and forestry laws.</p>
 </section>
+<section id="geospatial-data-science-projects" class="level2">
+<h2 class="anchored" data-anchor-id="geospatial-data-science-projects">GEOSPATIAL &amp; DATA SCIENCE PROJECTS</h2>
+<section id="burn-severity-with-sentinel-2-data-using-google-earth-engine-working-with-environmental-data-1222" class="level3">
+<h3 class="anchored" data-anchor-id="burn-severity-with-sentinel-2-data-using-google-earth-engine-working-with-environmental-data-1222">Burn Severity with Sentinel-2 data using Google Earth Engine | Working with Environmental Data (12/22)</h3>
+<p>• Burn severity analysis of the August Complex Fire using Sentinel-2 Image Collection and MTBS Feature Collection.</p>
+<p>• Utilized Google Earth Engine and Python to process and visualize the difference normalized burn ratio (DNBR) by severity class.</p>
+<p>• Leveraged the GEE platform to process and analyze large-scale satellite data efficiently and effectively.</p>
+</section>
+<section id="statistical-analysis-of-ndvi-in-redlined-regions-statistics-for-environmental-data-science-1122" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-analysis-of-ndvi-in-redlined-regions-statistics-for-environmental-data-science-1122">Statistical Analysis of NDVI in Redlined Regions | Statistics for Environmental Data Science (11/22)</h3>
+<p>• Conducted data wrangling and exploratory data analysis (EDA) using tidy format in R.</p>
+<p>• Conducted statistical analysis of NDVI data in redlined regions using Log-Log Ordinary Least Squares Regression and hypothesis testing to draw informed conclusions on non-linear relationships.</p>
+<p>• Interpreted regression coefficients to understand the impact of individual variables on overall outcome.</p>
+</section>
+<section id="analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa-undergraduate-thesis-422622" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-greenness-through-ndvi-in-redlined-areas-in-philadelphia-pa-undergraduate-thesis-422622">Analyzing Greenness through NDVI in Redlined areas in Philadelphia, PA | Undergraduate Thesis (4/22–6/22)</h3>
+<p>• Pre-process Landsat 8 OLI satellite data using RStudio to crop, mask, reclassify, and NDVI calculation.</p>
+<p>• Conducted QGIS processing to calculate NDVI, zonal statistics, and write memory function.</p>
+<p>• Integrated census median income data, NDVI data, and Redline data through QGIS and Excel.</p>
 </section>
 <section id="logistics-experience" class="level3">
 <h3 class="anchored" data-anchor-id="logistics-experience">Logistics Experience</h3>
@@ -210,6 +227,18 @@ ul.task-list{list-style: none;}
 <p>• Responsible for counting assigned product counts, entering counts into RSS, researching variances, and reporting discrepancies to management. Oversaw and prepared for annual physical inventory and assisted in post physical inventory reconciliation.</p>
 <p>• Supported senior management by delivering reports outlining performance to drive process improvements.</p>
 <p>• Coached employees around shrink trends and behaviors by communicating and coaching store employees and leadership on the importance of inventory integrity and any identified process gaps)</p>
+</section>
+</section>
+<section id="additional-education" class="level3">
+<h3 class="anchored" data-anchor-id="additional-education">Additional Education</h3>
+<section id="el-camino-community-college" class="level6">
+<h6 class="anchored" data-anchor-id="el-camino-community-college">El Camino Community College</h6>
+<p>(June 2020)</p>
+<p>El Camino College Foundation - Scholarship</p>
+<p>Associate of Science in Physics for Transfer</p>
+<p>Associate of Science in Mathematics for Transfer</p>
+<p>Associate of Science in General Science – Honors</p>
+<p>Associate of Arts in General Arts - Honors Associate of Arts in General Studies Biology and Physical Science</p>
 </section>
 </section>
 </section>
@@ -295,6 +324,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         }
       }
     }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
   }
   const isFileUrl = () => { 
     return window.location.protocol === 'file:';
@@ -346,7 +385,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Switch to dark mode if need be
   if (hasAlternateSentinel()) {
     toggleColorMode(true);
-  } 
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -368,7 +409,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -396,31 +454,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

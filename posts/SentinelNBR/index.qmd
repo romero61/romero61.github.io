@@ -264,7 +264,9 @@ postNBR = post_cm_mos.normalizedDifference(['B8', 'B12']);
 ```
 
 ## Creating an interactive map of pre-fire and post-fire NBRs
+
 ![image.png](img/split.png)
+
 ```{python}
 #Burn Ratio Product - Greyscale
 grey = ['white', 'black'];
@@ -291,7 +293,6 @@ dNBR_unscaled = preNBR.subtract(postNBR);
 #Scale product to USGS standards
 dNBR = dNBR_unscaled.multiply(1000);
 ```
-
 
 ![image.png](img/class.png)
 
