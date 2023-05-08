@@ -47,11 +47,13 @@ editor: visual
 
 Client: Paraguay National Forest Institute; Dr. Robert Heilmayr \| Role: Machine Learning Engineer
 
-• Utilized geospatial overlays to assess the compliance of property owners' execution of approved land use plans (LUPs) and calculate land use types and percent of clearing.
+• Assessed land use plan compliance and deforestation rates in the Paraguayan Chaco, determining that 78% of properties exhibited land use compliance utilizing geospatial overlays.
 
-• Created a law-based simulation tool in R to evaluate the effects of current and alternate laws on conserved forest area in the undeveloped Chaco region.
+• Developed a law-based geospatial simulation tool in R to estimate protected forest area under different laws in the undeveloped Chaco region, observing a difference of 3,397,183 ha between the least and most stringent scenarios.
 
-• Trained a convolutional neural network in Python to predict future deforestation patterns based on historic deforestation patterns and forestry laws.
+• Created a Random Forest model and Google Earth Engine workflow in Python for data acquisition and preprocessing, predicting future deforestation patterns and generating pixel-wise probabilities of near-future deforestation.
+
+• Supplied an interactive Shiny dashboard for stakeholders to examine results, guiding informed decisions on forest conservation and land use policies.
 
 ## GEOSPATIAL & DATA SCIENCE PROJECTS
 
