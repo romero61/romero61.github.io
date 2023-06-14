@@ -17,8 +17,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-Deciding that I needed to alter my life's trajectory I decided to leave my career in supply chain logistics as my outdoor passion drove me towards making an impact.
+As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
 
-I am currently pursuing a Master's of Environmental Data Science at the Bren School of Environmental Science & Management. I graduated from the University of California, Santa Barbara in 2022 with an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in G.I.S.
+I hold a Master\'s of Environmental Data Science from the Bren School of Environmental Science & Management, University of California, Santa Barbara. I also earned an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in Geographic Information Systems (GIS) in 2022.
 
-Data science is at the forefront of addressing today\'s water crises. My goal is to focus on the problem of clean water in conjunction with remote sensing. Improving water use efficiency, reduction of wasteful water use, real-time water quality monitoring, forecasting water quality, and assessing community water sources are all problems with data science at their core. The skills I have gained from the Bren School will allow me to engage with these problems as a data scientist. The opportunities for data science to improve the water and lives of those around me speaks directly to what I seek to accomplish professionally.
+My primary interest lies in leveraging data science and machine learning techniques to address critical environmental and climate issues. I am particularly captivated by the potential of remote sensing and earth observation in enhancing our understanding of the environment.
+
+The skills and knowledge I've acquired from the Bren School have prepared me to tackle a wide range of environmental challenges. Whether it's improving resource efficiency, monitoring environmental quality in real-time, forecasting environmental changes, or assessing community resources, I am convinced that these are problems with data science at their core.
+
+I am excited about the opportunities that lie ahead and am committed to using data science to improve our environment and the lives of those around us. This is what I aspire to achieve professionally.
