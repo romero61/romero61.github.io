@@ -7,9 +7,9 @@ editor: visual
 
 # EDUCATION
 
-### **Master of Environmental Data Science**
+### **Master of Data Science in Environmental Data Science**
 
-(Expected June 2023)
+(June 2023)
 
 **Bren School Of Environmental Science & Management - University of California, Santa Barbara**
 
@@ -37,7 +37,7 @@ editor: visual
 
 ------------------------------------------------------------------------
 
-**Languages**: Spanish, R (tidyverse), Python (Pandas, Scipy), Markdown, SQL, MATLAB
+**Languages**: Spanish, R (tidyverse, sf, terra), Python (Pandas, Rasterio, Scipy), Markdown, SQL, MATLAB
 
 **Environments**: RStudio, Quarto, ArcPro, Qgis, Vscode, Jupyter Lab
 
