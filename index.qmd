@@ -3,17 +3,21 @@ title: "Guillermo Romero"
 image: img/headshot.jpg
 page-layout: full
 about: 
-  template: marquee
+  template: solana
   image-shape: round
   image-width: 15em
+  links:
+    - text: GitHub
+      href: https://github.com/romero61
+    - text: Email
+      href: mailto:romero61@bren.ucsb.edu
+    - text: Linkedin
+      href: https://www.linkedin.com/in/romero61
 editor_options: 
   chunk_output_type: console
 ---
 
 
-<div style="display: flex; justify-content: space-between;">
-  <div style="flex: 1;">
-  <p>
    As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
    
    I hold a Master's of Data Science in Environmental Data Science from the Bren School of Environmental Science & Management, University of California, Santa Barbara. I also earned an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in Geographic Information Systems (GIS) in 2022.
@@ -23,21 +27,7 @@ editor_options:
    The skills and knowledge I've acquired from the Bren School have prepared me to tackle a wide range of environmental challenges. Whether it's improving resource efficiency, monitoring environmental quality in real-time, forecasting environmental changes, or assessing community resources, I am convinced that these are problems with data science at their core.
    
    I am excited about the opportunities that lie ahead and am committed to using data science to improve our environment and the lives of those around us. This is what I aspire to achieve professionally.
-   </p>
-</div>
-
-<div style="flex: 0 0 275px; margin-left: 20px; display: flex; flex-direction: column;">
- <a href="mailto:romero61@bren.ucsb.edu">
-    <img src="img/email-13752.png" alt="email" width=250 height=250>
-  </a>
-  <a href="https://www.linkedin.com/in/romero61">
-    <img src="img/linkedin-badge.png" alt="LinkedIn" width=240 height=275>
-  </a>
-  <a href="https://github.com/romero61">
-    <img src="img/git-badge.png" alt="GitHub" width=250 height=355>
-  </a>
-</div>
-</div>
+  
 
 
 
