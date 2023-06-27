@@ -16,7 +16,7 @@ editor_options:
 
 
 
-[![](img\github-badge.png)](https://github.com/romero61)
+[![](img\github-romero61.png)](https://github.com/romero61)
 [![](https://img.shields.io/badge/Gmail-EA4335?logo=gmail&logoColor=fff&style=flat)](mailto:romero61@bren.ucsb.edu) 
 [![](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge)](https://www.linkedin.com/in/romero61/)
 
