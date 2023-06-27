@@ -2,6 +2,7 @@
 title: "Guillermo Romero"
 image: img/headshot.jpg
 page-layout: full
+format: html
 about: 
   template: solana
   image-shape: round
@@ -11,28 +12,26 @@ editor_options:
 ---
 
 
+<div class="splash">
 
- 
-   
-   <div style="background-image: url('img\earth.jpg'); padding: 20px;">
-  <p>
+
 
 [![](img\github-badge.png)](https://github.com/romero61)
 [![](https://img.shields.io/badge/Gmail-EA4335?logo=gmail&logoColor=fff&style=flat)](mailto:romero61@bren.ucsb.edu) 
 [![](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge)](https://www.linkedin.com/in/romero61/)
 
-  As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
-   
-   I hold a Master's of Data Science in Environmental Data Science from the Bren School of Environmental Science & Management, University of California, Santa Barbara. I also earned an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in Geographic Information Systems (GIS) in 2022.
-  
-   My primary interest lies in leveraging data science and machine learning techniques to address critical environmental and climate issues. I am particularly captivated by the potential of remote sensing and earth observation in enhancing our understanding of the environment.
-   
-   The skills and knowledge I've acquired from the Bren School have prepared me to tackle a wide range of environmental challenges. Whether it's improving resource efficiency, monitoring environmental quality in real-time, forecasting environmental changes, or assessing community resources, I am convinced that these are problems with data science at their core.
-   
-   I am excited about the opportunities that lie ahead and am committed to using data science to improve our environment and the lives of those around us. This is what I aspire to achieve professionally.
-  </p>
-</div>
+As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
 
+I hold a Master's of Data Science in Environmental Data Science from the Bren School of Environmental Science & Management, University of California, Santa Barbara. I also earned an Earth Science B.S. with a concentration in geohydrology and a Geography B.A. with a concentration in Geographic Information Systems (GIS) in 2022.
+
+
+My primary interest lies in leveraging data science and machine learning techniques to address critical environmental and climate issues. I am particularly captivated by the potential of remote sensing and earth observation in enhancing our understanding of the environment.
+
+The skills and knowledge I've acquired from the Bren School have prepared me to tackle a wide range of environmental challenges. Whether it's improving resource efficiency, monitoring environmental quality in real-time, forecasting environmental changes, or assessing community resources, I am convinced that these are problems with data science at their core.
+
+I am excited about the opportunities that lie ahead and am committed to using data science to improve our environment and the lives of those around us. This is what I aspire to achieve professionally.
+  
+<div class="splash">
 
 
   

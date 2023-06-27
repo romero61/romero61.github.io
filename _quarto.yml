@@ -20,6 +20,7 @@ website:
         href: https://www.linkedin.com/in/romero61/
       - icon: envelope-exclamation
         href: mailto:romero61@bren.ucsb.edu
+        
 format:
   html:
     theme: 
