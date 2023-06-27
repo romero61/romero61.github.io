@@ -6,17 +6,13 @@ about:
   template: solana
   image-shape: round
   image-width: 15em
-  links:
-    - text: GitHub
-      href: https://github.com/romero61
-    - text: Email
-      href: mailto:romero61@bren.ucsb.edu
-    - text: Linkedin
-      href: https://www.linkedin.com/in/romero61
 editor_options: 
   chunk_output_type: console
 ---
 
+[![](img\github-badge.png)](https://github.com/romero61){height=50}
+[![](https://img.shields.io/badge/Gmail-EA4335?logo=gmail&logoColor=fff&style=flat)](mailto:romero61@bren.ucsb.edu) 
+[![](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge)](https://www.linkedin.com/in/romero61/)
 
    As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
    

@@ -13,7 +13,13 @@ website:
         text: Home
       - projects.qmd
       - resume.qmd
-    page-navigation: 
+    tools:
+      - icon: github
+        href: https://github.com/romero61
+      - icon: linkedin
+        href: https://www.linkedin.com/in/romero61/
+      - icon: envelope-exclamation
+        href: mailto:romero61@bren.ucsb.edu
 format:
   html:
     theme: 
