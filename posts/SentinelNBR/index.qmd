@@ -5,7 +5,7 @@ editor: visual
 jupyter: gee_env
 ---
 
-THIS POST IS TO SHOWCASE SOME PYTHON WORK DONE IN JUPYTER NOTEBOOK. CONVERTING TO QUARTO HAS CAUSED SOME INCOMPATABILITY SO SCREENSHOTS HAVE BEEN ADDED OF MAPS. ORIGINAL JUPYTER REPOSITORY CAN BE FOUND AT [romero61/eds220-burn-scar-analysis: EDS 220 final group project (github.com)](https://github.com/romero61/eds220-burn-scar-analysis)
+
 
 In this Jupyter Notebook, we first visualize true color images of the August Complex fire before and after it burned. Bands from the Sentinel 2 satellites as well as a dataset from USFS with wildfire boundaries are used for our analysis. Then, the Normalized Burn Ratio (NBR) is used to analyze burn severity, which is a measure of the degree to which a fire has affected the ecosystem. To compare these two images, we will compute the normalized difference to show where burn severity most significantly affected the vegetation and soil. We then added a scale to the normalized difference to show the levels of burn severity from the August Complex fire. Finally, we visualized the levels of severity to show the overall intensity. This link provides more information on the Sentinel 2 dataset that was used: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2.
 
@@ -17,14 +17,14 @@ In this Jupyter Notebook, we first visualize true color images of the August Com
 
 ### Table of Contents
 
-1.  [Purpose](#Purpose)
-2.  [Dataset Description](#Dataset_Description)
-3.  [Data I/O](#Data_I/O)
-4.  [Metadata Display](#Metadata_Display)
-5.  [True Color Visualization](#True_Color_Visualization)
-6.  [Use Case Examples](#Use_Case_Examples)
-7.  [Use Case Discussion](#Use_Case_Discussion)
-8.  [References](#References)
+1.  [Purpose](#notebook-purpose)
+2.  [Dataset Description](#dataset-description)
+3.  [Data I/O](#data-inputoutput)
+4.  [Metadata Display](#metadata-display)
+5.  [True Color Visualization](#true-color-visualization)
+6.  [Use Case Examples](#use-case-example)
+7.  [Use Case Discussion](#use-case-discussion)
+8.  [References](#references)
 
 # Notebook Purpose
 
@@ -67,7 +67,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 import ee
-import geemap
+import geemap.foliumap as geemap
 ```
 
 ```{python}
@@ -87,11 +87,12 @@ MTBS = ee.FeatureCollection("USFS/GTAC/MTBS/burned_area_boundaries/v1")
 
 ```{python}
 Map = geemap.Map(center=[39.9, -109], zoom=6.49)
-Map
+
 ```
 
 ```{python}
 Map.addLayer(MTBS, {}, 'Boundaries')
+Map
 ```
 
 # Metadata Display
@@ -156,15 +157,15 @@ aug_complex = MTBS.filter(ee.Filter.eq('Incid_Name', 'AUGUST COMPLEX'));
 
 ```{python}
 MapB = geemap.Map(center=[39.9, -122.9], zoom=8.7)
-MapB
+
 ```
 
-![image.png](img/aug.png)
 
 ```{python}
 MapB.addLayer(aug_complex, {}, "August Complex Boundary")
 #Map.centerObject(selected_counties, zoom = 9);
 #Map.remove_ee_layer('Boundaries')
+MapB
 ```
 
 The code below is outlining and saving time frames before the start of the fire and after the end of the fire. We chose to do \~15 day timeframes because the Sentinel satellite images are taken approximately every 5 days. The \~15 day timeframe means that we will hopefully have 2-3 images to use in our analysis.
@@ -222,13 +223,13 @@ post_cm_mos = postfire_CM_ImCol.mosaic().clip(aug_complex);
 
 Set up parameters for true color images using band 2, 3, and 4 from the Sentinel satellites, and adding non-cloud masked pre-fire and post-fire images and cloud masked pre-fire and post-fire images
 
-![image.png](img/true.png)
+
 
 ```{python}
 #visualization parameters for true color images
 vis = {'bands': ['B4', 'B3', 'B2'], 'max': 2000, 'gamma': 1.5};
 MapT = geemap.Map(center=[39.9, -122.9], zoom=8.7)
-MapT
+
 ```
 
 ```{python}
@@ -238,6 +239,7 @@ MapT.addLayer(post_mos, vis,'Post-fire image');
 #Add the true color images to the map.
 MapT.addLayer(pre_cm_mos, vis,'Pre-fire True Color Image - Clouds masked');
 MapT.addLayer(post_cm_mos, vis,'Post-fire True Color Image - Clouds masked');
+MapT
 ```
 
 # Use Case Example
@@ -265,7 +267,7 @@ postNBR = post_cm_mos.normalizedDifference(['B8', 'B12']);
 
 ## Creating an interactive map of pre-fire and post-fire NBRs
 
-![image.png](img/split.png)
+
 
 ```{python}
 #Burn Ratio Product - Greyscale
@@ -294,11 +296,10 @@ dNBR_unscaled = preNBR.subtract(postNBR);
 dNBR = dNBR_unscaled.multiply(1000);
 ```
 
-![image.png](img/class.png)
 
 ```{python}
 Map2 = geemap.Map(center=[39.9, -122.9], zoom=8.7)
-Map2
+
 ```
 
 ```{python}
@@ -331,7 +332,8 @@ legend_dict = {
     'NA': 'ffffff'}
 
 
-Map2.add_legend(legend_title = "dNBR Classes", legend_dict = legend_dict)
+Map2.add_legend(title = "dNBR Classes", legend_dict = legend_dict)
+Map2
 ```
 
 ```{python}
@@ -396,17 +398,14 @@ for i in range(len(names2)):
         i + 1;
 ```
 
-```{python}
-arealist
-```
 
 ```{python}
 test = pd.DataFrame(arealist)
-print(test)
+
 ```
 
 ```{python}
-# Theres probably an easier way to extract the values but this works
+
 # pop each class into its own variable, then create a dictionary that uses .getInfo() on each value to convert from ee.Number to number
 
 #NA = arealist[0:1].pop()
@@ -420,7 +419,7 @@ print(test)
 ```
 
 ```{python}
-# Takes quite  a while to run, so for the presentation I copied the results 
+# Takes quite a while to run
 
 #stats = {'Class': ['NA', 'High Severity', 'Moderate-high Severity', 'Moderate-low Severity', 'Low Severity', 'Unburned', 'Enhanced Regrowth, Low', 'Enhanced Regrowth, High'], 
 #  'Pixels': [NA['Pixels'].getInfo(), High_Severity['Pixels'].getInfo(), Moderate_high_Severity['Pixels'].getInfo(), Moderate_low_Severity['Pixels'].getInfo(), Low_Severity['Pixels'].getInfo(), Unburned['Pixels'].getInfo(), Enhanced_Regrowth_Low['Pixels'].getInfo(), Enhanced_Regrowth_High['Pixels'].getInfo() ],
@@ -451,7 +450,7 @@ df_stats = pd.DataFrame(stats).set_index('Class')
 df_stats
 ```
 
-<a id='Use_Case_Discussion'></a> \### Use Case Discussion
+### Use Case Discussion
 
 We found that nearly half of the burned area was determined to be between Moderate-Low to High severity. Additionally, the High severity area was the second largest percentage of area classified.
 
@@ -469,13 +468,13 @@ df_stats.plot(kind = 'pie', y = 'Percentage',
 plt.title('Burn Severity Analysis of 2020 August Complex Fire')
 ```
 
-<a id='Future_Analyses'></a> \### Future Analyses
+### Future Analyses
 
 With more time, the data extracted could be analyzed with other characteristics of the environment, such as slope, aspect, wind direction, and humidity. These analyses would better inform wildfire researchers the nature of fires, how they spread, and what characteristics increase severity.
 
 Additionally, this burn severity map can be compared to other wildfire burn severity maps as a function of time to see if the severity of the burns is getting worse. This would help inform wildfire researchers determine how quickly fires are increasingly negatively affecting the environment. Burn severity can also be compared temporally so that wildfire prevention can be implemented to the parts of the state most at risk.
 
-<a id='references'></a> \### References
+### References
 
 -   Sentinel data GEE page: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2
 -   USFS MTBS Shapefile GEE page: https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description
