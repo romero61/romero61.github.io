@@ -3,6 +3,17 @@ title: "Remote Sensing of Chlorophyll-a Using Landsat 8"
 description: 'Ocean remote sensing project extending analysis of Santa Monica Bay Chlorophyll-_a_ from Trinh et al. 2017 covering catastrophic failure of Hyperion Treatment Plant in 2020'
 editor: visual
 ---
+UPDATED 07/11/2023 WITH INTERACTIVE GOOGLE EARTH ENGINE APP USING SOLARA AND GEEMAP
+FURTHER REFINEMENTS PENDING
+
+<iframe
+	src="https://romero61-waterqualitymonitoring-smb.hf.space"
+	frameborder="0"
+	width="850"
+	height="1000"
+></iframe>
+
+
 
 # Introduction
 

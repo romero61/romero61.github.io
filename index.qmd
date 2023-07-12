@@ -13,7 +13,7 @@ editor_options:
 
 <div class="splash">
 
-[![](img%5Cgithub-romero61.png)](https://github.com/romero61) [![](https://img.shields.io/badge/Gmail-EA4335?logo=gmail&logoColor=fff&style=flat)](mailto:romero61@bren.ucsb.edu) [![](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge)](https://www.linkedin.com/in/romero61/)
+[![](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/romero61) [![](https://img.shields.io/badge/Gmail-EA4335?logo=gmail&logoColor=fff&style=flat)](mailto:romero61@bren.ucsb.edu) [![](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge)](https://www.linkedin.com/in/romero61/)
 
 As a dedicated environmental data scientist, I've honed my skills at the intersection of data science, geography, and machine learning.
 
