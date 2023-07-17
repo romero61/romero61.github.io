@@ -1,0 +1,13 @@
+---
+title: "Earth Engine App - Water Quality Monitoring"
+description: "Interactive  Map"
+editor: visual
+categories: ['geemap','earth engine']
+---
+
+<iframe
+	src="https://romero61-waterqualitymonitoring-smb.hf.space"
+	frameborder="0"
+	width="850"
+	height= '2500'
+></iframe>

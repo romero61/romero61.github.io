@@ -2,7 +2,8 @@
 title: "Projects"
 listing:
   contents: posts
-  type: grid
-  sort: date
+  type: default
+  sort: false
   fields: [image, title,description]
+  categories: true
 ---
