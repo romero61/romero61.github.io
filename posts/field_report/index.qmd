@@ -2,6 +2,7 @@
 title: "Field Methods In Hydrology - Field Report"
 description: "Writing Sample"
 editor: visual
+categories: ['hydrology']
 ---
 
 ![](images/File_010.jpeg){fig-align="center"}

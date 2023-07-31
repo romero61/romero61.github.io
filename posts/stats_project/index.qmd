@@ -3,6 +3,7 @@ title: "Statistical Analysis of NDVI in Redlined Regions"
 subtitle: "An extension to previous work"
 description: "Supplement to 'Analyzing Greenness through NDVI in Redlined areas in Philadelphia, Pennsylvania'"
 editor: visual
+categories: ['Statistics','R']
 date: "12/01/2022"
 ---
 

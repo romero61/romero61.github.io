@@ -1,8 +1,8 @@
 ---
 title: "Earth Engine App - Water Quality Monitoring"
-description: "Interactive  Map"
+description: "Companion Interactive  Map — Remote Sensing of Chlorophyll-A Using Landsat 8"
 editor: visual
-categories: ['geemap','earth engine']
+categories: ['geemap','earth engine', 'solara', 'python']
 ---
 
 <iframe

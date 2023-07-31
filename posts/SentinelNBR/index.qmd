@@ -2,6 +2,7 @@
 title: "Burn Severity with Sentinel-2 data using Google Earth Engine"
 description: 'Python Work from Jupyter Notebook'
 editor: visual
+categories: ['geemap','earth engine', 'python']
 jupyter: gee_env
 ---
 
