@@ -477,7 +477,7 @@ Additionally, this burn severity map can be compared to other wildfire burn seve
 
 ### References
 
--   Sentinel data GEE page: https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2
+-   Sentinel data GEE page:[https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2)
 -   USFS MTBS Shapefile GEE page: https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description
 -   MTBS Project Page: https://www.mtbs.gov/
 -   Step by Step: Burn Severity mapping in Google Earth Engine https://code.earthengine.google.com/b455ba8cf4b5bee822bb7ff8935e6209
