@@ -72,12 +72,30 @@ import geemap.foliumap as geemap
 ```
 
 ```{python}
+import os
+import sys
+import json
+from google.oauth2.service_account import Credentials
 #ee.Authenticate()
+# Get the path to the service account JSON file from the environment variable
+key_content  = os.environ.get('EEPRIVATE_KEY')
+
+
+# Parse the JSON content
+key_dict = json.loads(key_content)
+# Create credentials from the parsed JSON content
+SCOPES = [
+    'https://www.googleapis.com/auth/earthengine',
+    'https://www.googleapis.com/auth/cloud-platform'
+]
+credentials = Credentials.from_service_account_info(key_dict, scopes=SCOPES)
+
+# Initialize Earth Engine with the created credentials
+ee.Initialize(credentials)
+
 ```
 
-```{python}
-ee.Initialize()
-```
+
 
 ```{python}
 # Loading Sentinel-2 MSI: MultiSpectral Instrument, Level-1C

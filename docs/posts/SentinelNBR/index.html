@@ -259,24 +259,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geemap.foliumap <span class="im">as</span> geemap</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ee.Authenticate()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.oauth2.service_account <span class="im">import</span> Credentials</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#ee.Authenticate()</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the path to the service account JSON file from the environment variable</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>key_content  <span class="op">=</span> os.environ.get(<span class="st">'EEPRIVATE_KEY'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Parse the JSON content</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>key_dict <span class="op">=</span> json.loads(key_content)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create credentials from the parsed JSON content</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>SCOPES <span class="op">=</span> [</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://www.googleapis.com/auth/earthengine'</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://www.googleapis.com/auth/cloud-platform'</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>credentials <span class="op">=</span> Credentials.from_service_account_info(key_dict, scopes<span class="op">=</span>SCOPES)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize Earth Engine with the created credentials</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ee.Initialize(credentials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ee.Initialize()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading Sentinel-2 MSI: MultiSpectral Instrument, Level-1C</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>imagery <span class="op">=</span> ee.ImageCollection(<span class="st">'COPERNICUS/S2'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading Monitoring Trends in Burn Severity (MTBS) Feature Collection Dataset</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>MTBS <span class="op">=</span> ee.FeatureCollection(<span class="st">"USFS/GTAC/MTBS/burned_area_boundaries/v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading Sentinel-2 MSI: MultiSpectral Instrument, Level-1C</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>imagery <span class="op">=</span> ee.ImageCollection(<span class="st">'COPERNICUS/S2'</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading Monitoring Trends in Burn Severity (MTBS) Feature Collection Dataset</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>MTBS <span class="op">=</span> ee.FeatureCollection(<span class="st">"USFS/GTAC/MTBS/burned_area_boundaries/v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Map <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="dv">109</span>], zoom<span class="op">=</span><span class="fl">6.49</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Map <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="dv">109</span>], zoom<span class="op">=</span><span class="fl">6.49</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Map.addLayer(MTBS, {}, <span class="st">'Boundaries'</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Map.addLayer(MTBS, {}, <span class="st">'Boundaries'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 
 <iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -305,7 +321,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_2710a92ac69c836693476e0f0baa7983 {
+                #map_62ee17cc42dd09905eb0b6e277c4f88a {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -325,14 +341,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_2710a92ac69c836693476e0f0baa7983&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_62ee17cc42dd09905eb0b6e277c4f88a&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_2710a92ac69c836693476e0f0baa7983 = L.map(
-                &quot;map_2710a92ac69c836693476e0f0baa7983&quot;,
+            var map_62ee17cc42dd09905eb0b6e277c4f88a = L.map(
+                &quot;map_62ee17cc42dd09905eb0b6e277c4f88a&quot;,
                 {
                     center: [39.9, -109.0],
                     crs: L.CRS.EPSG3857,
@@ -356,21 +372,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
         
     
-            var tile_layer_0fd7864000bfdff998e2bceefe035d3a = L.tileLayer(
+            var tile_layer_7252b20d85279f12204ac6c0b31bf153 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 30, &quot;maxZoom&quot;: 30, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_2710a92ac69c836693476e0f0baa7983);
+            ).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
         
     
-            var tile_layer_890dd8c6b6c6981223533fa7035fcf3f = L.tileLayer(
+            var tile_layer_b3d8103b31cf1df7a04669d57cca1172 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_2710a92ac69c836693476e0f0baa7983);
+            ).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
         
     
             L.control.fullscreen(
                 {&quot;forceSeparateButton&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;title&quot;: &quot;Full Screen&quot;, &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;}
-            ).addTo(map_2710a92ac69c836693476e0f0baa7983);
+            ).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
         
     
             var options = {
@@ -380,13 +396,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
-                map_2710a92ac69c836693476e0f0baa7983
+                map_62ee17cc42dd09905eb0b6e277c4f88a
             );
             options.edit.featureGroup = drawnItems;
-            var draw_control_5793f04715081b14f2c75514c54de036 = new L.Control.Draw(
+            var draw_control_31dcc66c179fca12ec6cf6b86c70b68c = new L.Control.Draw(
                 options
-            ).addTo( map_2710a92ac69c836693476e0f0baa7983 );
-            map_2710a92ac69c836693476e0f0baa7983.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_62ee17cc42dd09905eb0b6e277c4f88a );
+            map_62ee17cc42dd09905eb0b6e277c4f88a.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -396,7 +412,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 });
                 drawnItems.addLayer(layer);
              });
-            map_2710a92ac69c836693476e0f0baa7983.on('draw:created', function(e) {
+            map_62ee17cc42dd09905eb0b6e277c4f88a.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
             
@@ -405,37 +421,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             L.Control.geocoder(
                 {&quot;collapsed&quot;: true, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topleft&quot;}
             ).on('markgeocode', function(e) {
-                map_2710a92ac69c836693476e0f0baa7983.setView(e.geocode.center, 11);
-            }).addTo(map_2710a92ac69c836693476e0f0baa7983);
+                map_62ee17cc42dd09905eb0b6e277c4f88a.setView(e.geocode.center, 11);
+            }).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
 
         
     
-            map_2710a92ac69c836693476e0f0baa7983.fitBounds(
+            map_62ee17cc42dd09905eb0b6e277c4f88a.fitBounds(
                 [[39.9, -109], [39.9, -109]],
                 {&quot;maxZoom&quot;: 6.49}
             );
         
     
-            var tile_layer_379cc24f4c0398ccb365149bf917df29 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/c0b71765090cf51d81d3de076bc44f8f-6f43c5edb17d9ba64ff5b45ccdad09eb/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_5c6c1a84cf4380d2c824d0f126ac1878 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/c0b71765090cf51d81d3de076bc44f8f-a7d34357cf7c557a657367c8e39152fe/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_2710a92ac69c836693476e0f0baa7983);
+            ).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
         
     
-            var layer_control_e28c69eccc2aa853e019584a0c6ee54f = {
+            var layer_control_a7820124937b9be851df6e1115128a24 = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_0fd7864000bfdff998e2bceefe035d3a,
+                    &quot;openstreetmap&quot; : tile_layer_7252b20d85279f12204ac6c0b31bf153,
                 },
                 overlays :  {
-                    &quot;Google Maps&quot; : tile_layer_890dd8c6b6c6981223533fa7035fcf3f,
-                    &quot;Boundaries&quot; : tile_layer_379cc24f4c0398ccb365149bf917df29,
+                    &quot;Google Maps&quot; : tile_layer_b3d8103b31cf1df7a04669d57cca1172,
+                    &quot;Boundaries&quot; : tile_layer_5c6c1a84cf4380d2c824d0f126ac1878,
                 },
             };
             L.control.layers(
-                layer_control_e28c69eccc2aa853e019584a0c6ee54f.base_layers,
-                layer_control_e28c69eccc2aa853e019584a0c6ee54f.overlays,
+                layer_control_a7820124937b9be851df6e1115128a24.base_layers,
+                layer_control_a7820124937b9be851df6e1115128a24.overlays,
                 {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
-            ).addTo(map_2710a92ac69c836693476e0f0baa7983);
+            ).addTo(map_62ee17cc42dd09905eb0b6e277c4f88a);
         
 </script>
 </html>" width="100%" height="600" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"=""></iframe>
@@ -444,61 +460,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="metadata-display" class="level1">
 <h1>Metadata Display</h1>
+<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the metadata of the Sentinel raster data.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#testimg = imagery.first()</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#testimg.getInfo()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the metadata of the Sentinel raster data.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#testimg = imagery.first()</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#testimg.getInfo()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the metadata of the MTBS vector data.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#shape = MTBS.first()</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#shape.getInfo()</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#MTBS.limit(1).getInfo()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the metadata of the MTBS vector data.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#shape = MTBS.first()</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#shape.getInfo()</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#MTBS.limit(1).getInfo()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Below is an additional way to subset data using a Feature Collection:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Needs to be seperated into different code blocks to run</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#counties = ee.FeatureCollection("TIGER/2018/Counties")</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(counties, {}, 'US Counties')</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">##### DRAW POLYGON TO SELECT COUNTIES! ####</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.draw_features</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#roi = ee.FeatureCollection(Map.draw_features)</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#selected_counties = counties.filterBounds(roi)</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(selected_counties, {}, "Selected Counties")</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(selected_counties, zoom = 8);</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#august_complex = MTBS.filterBounds(roi)</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(august_complex, {}, "August Complex Boundary")</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(august_complex, zoom = 8);</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_last_drawn()</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('US Counties')</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('August Complex Boundary')</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#c_polygon = selected_counties.geometry().geometries().filter(ee.Filter.hasType('item','Polygon')); </span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#geometry = ee.Geometry.MultiPolygon(c_polygon)                     </span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#geometry = ee.FeatureCollection(geometry)  </span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#geemap.ee_to_shp(geometry, filename='../downloads/selected_counties.shp')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Below is an additional way to subset data using a Feature Collection:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Needs to be seperated into different code blocks to run</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#counties = ee.FeatureCollection("TIGER/2018/Counties")</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(counties, {}, 'US Counties')</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">##### DRAW POLYGON TO SELECT COUNTIES! ####</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.draw_features</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#roi = ee.FeatureCollection(Map.draw_features)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#selected_counties = counties.filterBounds(roi)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(selected_counties, {}, "Selected Counties")</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(selected_counties, zoom = 8);</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#august_complex = MTBS.filterBounds(roi)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.addLayer(august_complex, {}, "August Complex Boundary")</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(august_complex, zoom = 8);</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_last_drawn()</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('US Counties')</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('August Complex Boundary')</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#c_polygon = selected_counties.geometry().geometries().filter(ee.Filter.hasType('item','Polygon')); </span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#geometry = ee.Geometry.MultiPolygon(c_polygon)                     </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#geometry = ee.FeatureCollection(geometry)  </span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#geemap.ee_to_shp(geometry, filename='../downloads/selected_counties.shp')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="true-color-visualization" class="level1">
 <h1>True Color Visualization</h1>
 <p>Start off by making a true color image of our use case example. This will show how the Sentinel data looks, as well as how we filter it to based on the MTBS shapefile.</p>
-<div class="cell" data-tags="[]" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>aug_complex <span class="op">=</span> MTBS.<span class="bu">filter</span>(ee.Filter.eq(<span class="st">'Incid_Name'</span>, <span class="st">'AUGUST COMPLEX'</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>aug_complex <span class="op">=</span> MTBS.<span class="bu">filter</span>(ee.Filter.eq(<span class="st">'Incid_Name'</span>, <span class="st">'AUGUST COMPLEX'</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#august_complex.getInfo()</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#aug_complex.getInfo()</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#BurnBndAc  INT  Burn boundary acreage  1068802</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#august_complex.getInfo()</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#aug_complex.getInfo()</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#BurnBndAc  INT  Burn boundary acreage  1068802</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>MapB <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>MapB <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>MapB.addLayer(aug_complex, {}, <span class="st">"August Complex Boundary"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(selected_counties, zoom = 9);</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('Boundaries')</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>MapB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>MapB.addLayer(aug_complex, {}, <span class="st">"August Complex Boundary"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.centerObject(selected_counties, zoom = 9);</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Map.remove_ee_layer('Boundaries')</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>MapB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
 
 <iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -527,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_091c27d01e36e63d5b250cc62ad00a8b {
+                #map_48966d45c634b6873220c4cba53a087d {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -547,14 +563,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_091c27d01e36e63d5b250cc62ad00a8b&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_48966d45c634b6873220c4cba53a087d&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_091c27d01e36e63d5b250cc62ad00a8b = L.map(
-                &quot;map_091c27d01e36e63d5b250cc62ad00a8b&quot;,
+            var map_48966d45c634b6873220c4cba53a087d = L.map(
+                &quot;map_48966d45c634b6873220c4cba53a087d&quot;,
                 {
                     center: [39.9, -122.9],
                     crs: L.CRS.EPSG3857,
@@ -578,21 +594,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
         
     
-            var tile_layer_76688d3289c2a8fc907a80dd4104b435 = L.tileLayer(
+            var tile_layer_702f6375ec601bb206e3faf16a08384a = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 30, &quot;maxZoom&quot;: 30, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+            ).addTo(map_48966d45c634b6873220c4cba53a087d);
         
     
-            var tile_layer_890dd8c6b6c6981223533fa7035fcf3f = L.tileLayer(
+            var tile_layer_b3d8103b31cf1df7a04669d57cca1172 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+            ).addTo(map_48966d45c634b6873220c4cba53a087d);
         
     
             L.control.fullscreen(
                 {&quot;forceSeparateButton&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;title&quot;: &quot;Full Screen&quot;, &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;}
-            ).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+            ).addTo(map_48966d45c634b6873220c4cba53a087d);
         
     
             var options = {
@@ -602,13 +618,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
-                map_091c27d01e36e63d5b250cc62ad00a8b
+                map_48966d45c634b6873220c4cba53a087d
             );
             options.edit.featureGroup = drawnItems;
-            var draw_control_ba782d6f896c264d18b04cf817fe96a9 = new L.Control.Draw(
+            var draw_control_44806b2953361d286d10721996a61756 = new L.Control.Draw(
                 options
-            ).addTo( map_091c27d01e36e63d5b250cc62ad00a8b );
-            map_091c27d01e36e63d5b250cc62ad00a8b.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_48966d45c634b6873220c4cba53a087d );
+            map_48966d45c634b6873220c4cba53a087d.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -618,7 +634,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 });
                 drawnItems.addLayer(layer);
              });
-            map_091c27d01e36e63d5b250cc62ad00a8b.on('draw:created', function(e) {
+            map_48966d45c634b6873220c4cba53a087d.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
             
@@ -627,104 +643,104 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             L.Control.geocoder(
                 {&quot;collapsed&quot;: true, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topleft&quot;}
             ).on('markgeocode', function(e) {
-                map_091c27d01e36e63d5b250cc62ad00a8b.setView(e.geocode.center, 11);
-            }).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+                map_48966d45c634b6873220c4cba53a087d.setView(e.geocode.center, 11);
+            }).addTo(map_48966d45c634b6873220c4cba53a087d);
 
         
     
-            map_091c27d01e36e63d5b250cc62ad00a8b.fitBounds(
+            map_48966d45c634b6873220c4cba53a087d.fitBounds(
                 [[39.9, -122.9], [39.9, -122.9]],
                 {&quot;maxZoom&quot;: 8.7}
             );
         
     
-            var tile_layer_c5c48abb580ddda107e986871c9a82af = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/c4bbf8ebb57b9ea265f67094dab835df-2fdd752d61218d8d5f4fd6fcdad0670d/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_68dc031c660961aa0f8fc0179e1788b0 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/c4bbf8ebb57b9ea265f67094dab835df-4ce4c59c39d2396675c0da0422301036/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+            ).addTo(map_48966d45c634b6873220c4cba53a087d);
         
     
-            var layer_control_95c9683e9b9601862c869932da4910ed = {
+            var layer_control_8cf0df735d05bb129a2280b3756b3df5 = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_76688d3289c2a8fc907a80dd4104b435,
+                    &quot;openstreetmap&quot; : tile_layer_702f6375ec601bb206e3faf16a08384a,
                 },
                 overlays :  {
-                    &quot;Google Maps&quot; : tile_layer_890dd8c6b6c6981223533fa7035fcf3f,
-                    &quot;August Complex Boundary&quot; : tile_layer_c5c48abb580ddda107e986871c9a82af,
+                    &quot;Google Maps&quot; : tile_layer_b3d8103b31cf1df7a04669d57cca1172,
+                    &quot;August Complex Boundary&quot; : tile_layer_68dc031c660961aa0f8fc0179e1788b0,
                 },
             };
             L.control.layers(
-                layer_control_95c9683e9b9601862c869932da4910ed.base_layers,
-                layer_control_95c9683e9b9601862c869932da4910ed.overlays,
+                layer_control_8cf0df735d05bb129a2280b3756b3df5.base_layers,
+                layer_control_8cf0df735d05bb129a2280b3756b3df5.overlays,
                 {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
-            ).addTo(map_091c27d01e36e63d5b250cc62ad00a8b);
+            ).addTo(map_48966d45c634b6873220c4cba53a087d);
         
 </script>
 </html>" width="100%" height="600" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"=""></iframe>
 </div>
 </div>
 <p>The code below is outlining and saving time frames before the start of the fire and after the end of the fire. We chose to do ~15 day timeframes because the Sentinel satellite images are taken approximately every 5 days. The ~15 day timeframe means that we will hopefully have 2-3 images to use in our analysis.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start of fire August 16</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># End of fire November 12</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>prefire_start <span class="op">=</span> <span class="st">'2020-07-15'</span><span class="op">;</span>   </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>prefire_end <span class="op">=</span> <span class="st">'2020-07-30'</span><span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>postfire_start <span class="op">=</span> <span class="st">'2020-11-13'</span><span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>postfire_end <span class="op">=</span> <span class="st">'2020-11-30'</span><span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Sentinel data</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>imagery <span class="op">=</span> ee.ImageCollection(<span class="st">'COPERNICUS/S2'</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the Image collection based on the timeframes. </span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the cells to the MTBS polygon.</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>prefireImCol <span class="op">=</span> ee.ImageCollection(imagery.filterDate(prefire_start, prefire_end).filterBounds(aug_complex))<span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>postfireImCol <span class="op">=</span> ee.ImageCollection(imagery.filterDate(postfire_start, postfire_end).filterBounds(aug_complex))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start of fire August 16</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># End of fire November 12</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>prefire_start <span class="op">=</span> <span class="st">'2020-07-15'</span><span class="op">;</span>   </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>prefire_end <span class="op">=</span> <span class="st">'2020-07-30'</span><span class="op">;</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>postfire_start <span class="op">=</span> <span class="st">'2020-11-13'</span><span class="op">;</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>postfire_end <span class="op">=</span> <span class="st">'2020-11-30'</span><span class="op">;</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Sentinel data</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>imagery <span class="op">=</span> ee.ImageCollection(<span class="st">'COPERNICUS/S2'</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the Image collection based on the timeframes. </span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the cells to the MTBS polygon.</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>prefireImCol <span class="op">=</span> ee.ImageCollection(imagery.filterDate(prefire_start, prefire_end).filterBounds(aug_complex))<span class="op">;</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>postfireImCol <span class="op">=</span> ee.ImageCollection(imagery.filterDate(postfire_start, postfire_end).filterBounds(aug_complex))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to mask clouds from the pixel quality band of Sentinel-2 SR data.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span>  maskS2sr(image):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bits 10 and 11 are clouds and cirrus, respectively.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    cloudBitMask <span class="op">=</span> ee.Number(<span class="dv">2</span>).<span class="bu">pow</span>(<span class="dv">10</span>).<span class="bu">int</span>()<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    cirrusBitMask <span class="op">=</span> ee.Number(<span class="dv">2</span>).<span class="bu">pow</span>(<span class="dv">11</span>).<span class="bu">int</span>()<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Get the pixel QA band.</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    qa <span class="op">=</span> image.select(<span class="st">'QA60'</span>)<span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#All flags should be set to zero, indicating clear conditions.</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> qa.bitwiseAnd(cloudBitMask).eq(<span class="dv">0</span>).bitwiseAnd(cirrusBitMask).eq(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Return the masked image, scaled to TOA reflectance, without the QA bands.</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> image.updateMask(mask).copyProperties(image, [<span class="st">"system:time_start"</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to mask clouds from the pixel quality band of Sentinel-2 SR data.</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span>  maskS2sr(image):</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Bits 10 and 11 are clouds and cirrus, respectively.</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    cloudBitMask <span class="op">=</span> ee.Number(<span class="dv">2</span>).<span class="bu">pow</span>(<span class="dv">10</span>).<span class="bu">int</span>()<span class="op">;</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    cirrusBitMask <span class="op">=</span> ee.Number(<span class="dv">2</span>).<span class="bu">pow</span>(<span class="dv">11</span>).<span class="bu">int</span>()<span class="op">;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Get the pixel QA band.</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    qa <span class="op">=</span> image.select(<span class="st">'QA60'</span>)<span class="op">;</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#All flags should be set to zero, indicating clear conditions.</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> qa.bitwiseAnd(cloudBitMask).eq(<span class="dv">0</span>).bitwiseAnd(cirrusBitMask).eq(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Return the masked image, scaled to TOA reflectance, without the QA bands.</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> image.updateMask(mask).copyProperties(image, [<span class="st">"system:time_start"</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply platform-specific cloud mask</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>prefire_CM_ImCol <span class="op">=</span> prefireImCol.<span class="bu">map</span>(maskS2sr)<span class="op">;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>postfire_CM_ImCol <span class="op">=</span> postfireImCol.<span class="bu">map</span>(maskS2sr)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply platform-specific cloud mask</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>prefire_CM_ImCol <span class="op">=</span> prefireImCol.<span class="bu">map</span>(maskS2sr)<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>postfire_CM_ImCol <span class="op">=</span> postfireImCol.<span class="bu">map</span>(maskS2sr)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The code below creates a mosaic of images if our polygon includes the boundaries between images. It creates and saves one continuous image instead of multiple images.</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If multiple images in area creates mosaic and clips otherwise only clips</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Without CLoud Mask</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>pre_mos <span class="op">=</span> prefireImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>post_mos <span class="op">=</span> postfireImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># With Cloud Mask</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>pre_cm_mos <span class="op">=</span> prefire_CM_ImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>post_cm_mos <span class="op">=</span> postfire_CM_ImCol.mosaic().clip(aug_complex)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If multiple images in area creates mosaic and clips otherwise only clips</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Without CLoud Mask</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>pre_mos <span class="op">=</span> prefireImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>post_mos <span class="op">=</span> postfireImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># With Cloud Mask</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>pre_cm_mos <span class="op">=</span> prefire_CM_ImCol.mosaic().clip(aug_complex)<span class="op">;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>post_cm_mos <span class="op">=</span> postfire_CM_ImCol.mosaic().clip(aug_complex)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Set up parameters for true color images using band 2, 3, and 4 from the Sentinel satellites, and adding non-cloud masked pre-fire and post-fire images and cloud masked pre-fire and post-fire images</p>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#visualization parameters for true color images</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>vis <span class="op">=</span> {<span class="st">'bands'</span>: [<span class="st">'B4'</span>, <span class="st">'B3'</span>, <span class="st">'B2'</span>], <span class="st">'max'</span>: <span class="dv">2000</span>, <span class="st">'gamma'</span>: <span class="fl">1.5</span>}<span class="op">;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>MapT <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#visualization parameters for true color images</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>vis <span class="op">=</span> {<span class="st">'bands'</span>: [<span class="st">'B4'</span>, <span class="st">'B3'</span>, <span class="st">'B2'</span>], <span class="st">'max'</span>: <span class="dv">2000</span>, <span class="st">'gamma'</span>: <span class="fl">1.5</span>}<span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>MapT <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the true color images to the map.</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(pre_mos, vis,<span class="st">'Pre-fire image'</span>)<span class="op">;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(post_mos, vis,<span class="st">'Post-fire image'</span>)<span class="op">;</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Add the true color images to the map.</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(pre_cm_mos, vis,<span class="st">'Pre-fire True Color Image - Clouds masked'</span>)<span class="op">;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(post_cm_mos, vis,<span class="st">'Post-fire True Color Image - Clouds masked'</span>)<span class="op">;</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>MapT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the true color images to the map.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(pre_mos, vis,<span class="st">'Pre-fire image'</span>)<span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(post_mos, vis,<span class="st">'Post-fire image'</span>)<span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Add the true color images to the map.</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(pre_cm_mos, vis,<span class="st">'Pre-fire True Color Image - Clouds masked'</span>)<span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>MapT.addLayer(post_cm_mos, vis,<span class="st">'Post-fire True Color Image - Clouds masked'</span>)<span class="op">;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>MapT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
 
 <iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -753,7 +769,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_eac4d971bfc655050a55d67325617d86 {
+                #map_0f4e0194206c508a801b31eb57520bd9 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -773,14 +789,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_eac4d971bfc655050a55d67325617d86&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_0f4e0194206c508a801b31eb57520bd9&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_eac4d971bfc655050a55d67325617d86 = L.map(
-                &quot;map_eac4d971bfc655050a55d67325617d86&quot;,
+            var map_0f4e0194206c508a801b31eb57520bd9 = L.map(
+                &quot;map_0f4e0194206c508a801b31eb57520bd9&quot;,
                 {
                     center: [39.9, -122.9],
                     crs: L.CRS.EPSG3857,
@@ -804,21 +820,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
         
     
-            var tile_layer_ec907d2a857da03a6963fe9e872fccb4 = L.tileLayer(
+            var tile_layer_2c10430f7fb410a61d23dcad7245aacf = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 30, &quot;maxZoom&quot;: 30, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
-            var tile_layer_890dd8c6b6c6981223533fa7035fcf3f = L.tileLayer(
+            var tile_layer_b3d8103b31cf1df7a04669d57cca1172 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
             L.control.fullscreen(
                 {&quot;forceSeparateButton&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;title&quot;: &quot;Full Screen&quot;, &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
             var options = {
@@ -828,13 +844,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
-                map_eac4d971bfc655050a55d67325617d86
+                map_0f4e0194206c508a801b31eb57520bd9
             );
             options.edit.featureGroup = drawnItems;
-            var draw_control_88c4dec670ec05f80b8a0bb669b41538 = new L.Control.Draw(
+            var draw_control_d1dfdb60a7c528e115c6bf41e0ffdb27 = new L.Control.Draw(
                 options
-            ).addTo( map_eac4d971bfc655050a55d67325617d86 );
-            map_eac4d971bfc655050a55d67325617d86.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_0f4e0194206c508a801b31eb57520bd9 );
+            map_0f4e0194206c508a801b31eb57520bd9.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -844,7 +860,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 });
                 drawnItems.addLayer(layer);
              });
-            map_eac4d971bfc655050a55d67325617d86.on('draw:created', function(e) {
+            map_0f4e0194206c508a801b31eb57520bd9.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
             
@@ -853,58 +869,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             L.Control.geocoder(
                 {&quot;collapsed&quot;: true, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topleft&quot;}
             ).on('markgeocode', function(e) {
-                map_eac4d971bfc655050a55d67325617d86.setView(e.geocode.center, 11);
-            }).addTo(map_eac4d971bfc655050a55d67325617d86);
+                map_0f4e0194206c508a801b31eb57520bd9.setView(e.geocode.center, 11);
+            }).addTo(map_0f4e0194206c508a801b31eb57520bd9);
 
         
     
-            map_eac4d971bfc655050a55d67325617d86.fitBounds(
+            map_0f4e0194206c508a801b31eb57520bd9.fitBounds(
                 [[39.9, -122.9], [39.9, -122.9]],
                 {&quot;maxZoom&quot;: 8.7}
             );
         
     
-            var tile_layer_2c4a2ec2ba8fa0755a1eb972d35bae97 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/141d34ad849d06a58ac79dcb1b71739f-93ca58020b1ca9a2f8fd9872055e49f3/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_a6309ecf72f1e4071e0fcc6d16da250b = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/6e21d74a3b1d282ec84170f90b7a7a17-2a3c652a73c550348546442a04a48971/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
-            var tile_layer_55c8d760b3c71521a9702a8077b44675 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/84f2598e64b157fa7ef31c003e745db0-eb12e622d7d958a9ef6b174fc2828623/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_2425f8589a7265f6e0ca34ccef188565 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/f601338d87d5eee43fa160f0089507ad-a08de7e207bcf58806c3dc4c8cd242fe/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
-            var tile_layer_2d9a77d697b6eec3692e5ddb05e9ae1d = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/b40cd7ddfaa82fffe212971d20f124a8-d83729370b0f7b9052ce8fad41f429c7/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_d758340968ada68bf9d2ce2dc2aaeacf = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/cd936a971f25c719cc699ace6f56c5ba-030d161756cec17b4b8622d8907feeec/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
-            var tile_layer_64339c21a0bff0cdfa7d615b4649ac89 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/d43776e8f5ab0641d6c17d6ddeb56634-cd9c3199d9f21d806b617aa404b0f04f/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_7e51d0e691cdbbaeb0a9eb6dacebeafd = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/4a5d1707634d8e4ff3e812a5a7f9d9a0-5e244e05e40d7a492b9322afaaf76950/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
     
-            var layer_control_cd22bf68177849a4fd766151e852734e = {
+            var layer_control_d1339e59b5d72e63f4dad9ac8d102d8a = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_ec907d2a857da03a6963fe9e872fccb4,
+                    &quot;openstreetmap&quot; : tile_layer_2c10430f7fb410a61d23dcad7245aacf,
                 },
                 overlays :  {
-                    &quot;Google Maps&quot; : tile_layer_890dd8c6b6c6981223533fa7035fcf3f,
-                    &quot;Pre-fire image&quot; : tile_layer_2c4a2ec2ba8fa0755a1eb972d35bae97,
-                    &quot;Post-fire image&quot; : tile_layer_55c8d760b3c71521a9702a8077b44675,
-                    &quot;Pre-fire True Color Image - Clouds masked&quot; : tile_layer_2d9a77d697b6eec3692e5ddb05e9ae1d,
-                    &quot;Post-fire True Color Image - Clouds masked&quot; : tile_layer_64339c21a0bff0cdfa7d615b4649ac89,
+                    &quot;Google Maps&quot; : tile_layer_b3d8103b31cf1df7a04669d57cca1172,
+                    &quot;Pre-fire image&quot; : tile_layer_a6309ecf72f1e4071e0fcc6d16da250b,
+                    &quot;Post-fire image&quot; : tile_layer_2425f8589a7265f6e0ca34ccef188565,
+                    &quot;Pre-fire True Color Image - Clouds masked&quot; : tile_layer_d758340968ada68bf9d2ce2dc2aaeacf,
+                    &quot;Post-fire True Color Image - Clouds masked&quot; : tile_layer_7e51d0e691cdbbaeb0a9eb6dacebeafd,
                 },
             };
             L.control.layers(
-                layer_control_cd22bf68177849a4fd766151e852734e.base_layers,
-                layer_control_cd22bf68177849a4fd766151e852734e.overlays,
+                layer_control_d1339e59b5d72e63f4dad9ac8d102d8a.base_layers,
+                layer_control_d1339e59b5d72e63f4dad9ac8d102d8a.overlays,
                 {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
-            ).addTo(map_eac4d971bfc655050a55d67325617d86);
+            ).addTo(map_0f4e0194206c508a801b31eb57520bd9);
         
 </script>
 </html>" width="100%" height="600" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"=""></iframe>
@@ -932,24 +948,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p>Preparing pre-fire and post-fire Normalized Burn Ratio (NBR) images:</p>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>preNBR <span class="op">=</span> pre_cm_mos.normalizedDifference([<span class="st">'B8'</span>, <span class="st">'B12'</span>])<span class="op">;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>postNBR <span class="op">=</span> post_cm_mos.normalizedDifference([<span class="st">'B8'</span>, <span class="st">'B12'</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>preNBR <span class="op">=</span> pre_cm_mos.normalizedDifference([<span class="st">'B8'</span>, <span class="st">'B12'</span>])<span class="op">;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>postNBR <span class="op">=</span> post_cm_mos.normalizedDifference([<span class="st">'B8'</span>, <span class="st">'B12'</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="creating-an-interactive-map-of-pre-fire-and-post-fire-nbrs" class="level2">
 <h2 class="anchored" data-anchor-id="creating-an-interactive-map-of-pre-fire-and-post-fire-nbrs">Creating an interactive map of pre-fire and post-fire NBRs</h2>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Burn Ratio Product - Greyscale</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>grey <span class="op">=</span> [<span class="st">'white'</span>, <span class="st">'black'</span>]<span class="op">;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>left_layer <span class="op">=</span> geemap.ee_tile_layer(preNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1</span>, <span class="st">'max'</span>: <span class="dv">1</span>, <span class="st">'palette'</span>: grey}, <span class="st">'Prefire Normalized Burn Ratio'</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>right_layer <span class="op">=</span> geemap.ee_tile_layer(postNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1</span>, <span class="st">'max'</span>: <span class="dv">1</span>, <span class="st">'palette'</span>: grey}, <span class="st">'Postfire Normalized Burn Ratio'</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>Maps <span class="op">=</span>  geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>Maps.split_map(left_layer, right_layer)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>Maps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Burn Ratio Product - Greyscale</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>grey <span class="op">=</span> [<span class="st">'white'</span>, <span class="st">'black'</span>]<span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>left_layer <span class="op">=</span> geemap.ee_tile_layer(preNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1</span>, <span class="st">'max'</span>: <span class="dv">1</span>, <span class="st">'palette'</span>: grey}, <span class="st">'Prefire Normalized Burn Ratio'</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>right_layer <span class="op">=</span> geemap.ee_tile_layer(postNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1</span>, <span class="st">'max'</span>: <span class="dv">1</span>, <span class="st">'palette'</span>: grey}, <span class="st">'Postfire Normalized Burn Ratio'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>Maps <span class="op">=</span>  geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>Maps.split_map(left_layer, right_layer)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>Maps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
 
 <iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -978,7 +994,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_b91bc4d946c30ee802a16b7ed452faca {
+                #map_9b71e39c31016683b72df80b395be7a3 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -999,14 +1015,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_b91bc4d946c30ee802a16b7ed452faca&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_9b71e39c31016683b72df80b395be7a3&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_b91bc4d946c30ee802a16b7ed452faca = L.map(
-                &quot;map_b91bc4d946c30ee802a16b7ed452faca&quot;,
+            var map_9b71e39c31016683b72df80b395be7a3 = L.map(
+                &quot;map_9b71e39c31016683b72df80b395be7a3&quot;,
                 {
                     center: [39.9, -122.9],
                     crs: L.CRS.EPSG3857,
@@ -1030,21 +1046,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
         
     
-            var tile_layer_b6dfe120b9f46c7d2d25c23c5545270d = L.tileLayer(
+            var tile_layer_942f9d9cc02d68e070c88eb5eee98676 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 30, &quot;maxZoom&quot;: 30, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
-            var tile_layer_890dd8c6b6c6981223533fa7035fcf3f = L.tileLayer(
+            var tile_layer_b3d8103b31cf1df7a04669d57cca1172 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
             L.control.fullscreen(
                 {&quot;forceSeparateButton&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;title&quot;: &quot;Full Screen&quot;, &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
             var options = {
@@ -1054,13 +1070,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
-                map_b91bc4d946c30ee802a16b7ed452faca
+                map_9b71e39c31016683b72df80b395be7a3
             );
             options.edit.featureGroup = drawnItems;
-            var draw_control_238e07d3eae6234b32707088758baee7 = new L.Control.Draw(
+            var draw_control_1131f1c171ef1486cd42057c35f67f00 = new L.Control.Draw(
                 options
-            ).addTo( map_b91bc4d946c30ee802a16b7ed452faca );
-            map_b91bc4d946c30ee802a16b7ed452faca.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_9b71e39c31016683b72df80b395be7a3 );
+            map_9b71e39c31016683b72df80b395be7a3.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -1070,7 +1086,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 });
                 drawnItems.addLayer(layer);
              });
-            map_b91bc4d946c30ee802a16b7ed452faca.on('draw:created', function(e) {
+            map_9b71e39c31016683b72df80b395be7a3.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
             
@@ -1079,49 +1095,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             L.Control.geocoder(
                 {&quot;collapsed&quot;: true, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topleft&quot;}
             ).on('markgeocode', function(e) {
-                map_b91bc4d946c30ee802a16b7ed452faca.setView(e.geocode.center, 11);
-            }).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+                map_9b71e39c31016683b72df80b395be7a3.setView(e.geocode.center, 11);
+            }).addTo(map_9b71e39c31016683b72df80b395be7a3);
 
         
     
-            map_b91bc4d946c30ee802a16b7ed452faca.fitBounds(
+            map_9b71e39c31016683b72df80b395be7a3.fitBounds(
                 [[39.9, -122.9], [39.9, -122.9]],
                 {&quot;maxZoom&quot;: 8.7}
             );
         
     
-            var tile_layer_320b48c05b722d50242362c444705fb4 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/18a9c53ef2ff3f2efca2ec15835b5334-608d47c36be66f7256eace29f83fbe07/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_288e51c2e7bd82b6e665d1ed02c6e8b1 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/21d3eba21c1040299bd1afbc9e2a36a1-60da813f869a5a3e98113bb49dd06596/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
-            var tile_layer_ad7a6de7c2f9ff87b7910aa5ae43b8c8 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/80f3ee56c70ab3c839f18e6174d3778d-ef96ad0f6d43d9bb653cac9303840587/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_cb2440ce45522694f2d18232cee6184b = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/18aebb46518197e8680281d1dc501694-7d054d2f1baa51590f2b8a4fc56c353c/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
-            var side_by_side_layers_2d1271160dcad984e2c11194075af708 = L.control.sideBySide(
-                tile_layer_320b48c05b722d50242362c444705fb4, tile_layer_ad7a6de7c2f9ff87b7910aa5ae43b8c8
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            var side_by_side_layers_ce0d38eb0904d1d4b58ba33a4efc48ca = L.control.sideBySide(
+                tile_layer_288e51c2e7bd82b6e665d1ed02c6e8b1, tile_layer_cb2440ce45522694f2d18232cee6184b
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
     
-            var layer_control_b5a6c17f8352824044e6d32b7b03f8a6 = {
+            var layer_control_ddc338ca436ad08889bb2b42578b4cd0 = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_b6dfe120b9f46c7d2d25c23c5545270d,
+                    &quot;openstreetmap&quot; : tile_layer_942f9d9cc02d68e070c88eb5eee98676,
                 },
                 overlays :  {
-                    &quot;Google Maps&quot; : tile_layer_890dd8c6b6c6981223533fa7035fcf3f,
-                    &quot;Prefire Normalized Burn Ratio&quot; : tile_layer_320b48c05b722d50242362c444705fb4,
-                    &quot;Postfire Normalized Burn Ratio&quot; : tile_layer_ad7a6de7c2f9ff87b7910aa5ae43b8c8,
+                    &quot;Google Maps&quot; : tile_layer_b3d8103b31cf1df7a04669d57cca1172,
+                    &quot;Prefire Normalized Burn Ratio&quot; : tile_layer_288e51c2e7bd82b6e665d1ed02c6e8b1,
+                    &quot;Postfire Normalized Burn Ratio&quot; : tile_layer_cb2440ce45522694f2d18232cee6184b,
                 },
             };
             L.control.layers(
-                layer_control_b5a6c17f8352824044e6d32b7b03f8a6.base_layers,
-                layer_control_b5a6c17f8352824044e6d32b7b03f8a6.overlays,
+                layer_control_ddc338ca436ad08889bb2b42578b4cd0.base_layers,
+                layer_control_ddc338ca436ad08889bb2b42578b4cd0.overlays,
                 {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
-            ).addTo(map_b91bc4d946c30ee802a16b7ed452faca);
+            ).addTo(map_9b71e39c31016683b72df80b395be7a3);
         
 </script>
 </html>" width="100%" height="600" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"=""></iframe>
@@ -1138,45 +1154,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>A higher value of dNBR indicates more severe damage, while areas with negative dNBR values may indicate regrowth following a fire.</p>
 <p>Table 1. Burn severity levels obtained calculating dNBR, proposed by USGS. <img src="img/dnbrclass.png" class="img-fluid" alt="image.png"></p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dNBR_unscaled <span class="op">=</span> preNBR.subtract(postNBR)<span class="op">;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Scale product to USGS standards</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>dNBR <span class="op">=</span> dNBR_unscaled.multiply(<span class="dv">1000</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dNBR_unscaled <span class="op">=</span> preNBR.subtract(postNBR)<span class="op">;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Scale product to USGS standards</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>dNBR <span class="op">=</span> dNBR_unscaled.multiply(<span class="dv">1000</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Map2 <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Map2 <span class="op">=</span> geemap.Map(center<span class="op">=</span>[<span class="fl">39.9</span>, <span class="op">-</span><span class="fl">122.9</span>], zoom<span class="op">=</span><span class="fl">8.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Map2.add_basemap(<span class="st">'SATELLITE'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Map2.add_basemap(<span class="st">'SATELLITE'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dNBR greyscale</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Map2.addLayer(dNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1000</span>, <span class="st">'max'</span>: <span class="dv">1000</span>, <span class="st">'palette'</span>: grey}, <span class="st">'dNBR greyscale'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dNBR greyscale</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Map2.addLayer(dNBR, {<span class="st">'min'</span>: <span class="op">-</span><span class="dv">1000</span>, <span class="st">'max'</span>: <span class="dv">1000</span>, <span class="st">'palette'</span>: grey}, <span class="st">'dNBR greyscale'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define an SLD style of discrete intervals to apply to the image.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sld_intervals <span class="op">=</span> <span class="st">'&lt;RasterSymbolizer&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMap type="intervals" extended="false" &gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ffffff" quantity="-500" label="-500"/&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#7a8737" quantity="-250" label="-250" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#acbe4d" quantity="-100" label="-100" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#0ae042" quantity="100" label="100" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#fff70b" quantity="270" label="270" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ffaf38" quantity="440" label="440" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ff641b" quantity="660" label="660" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#a41fd6" quantity="2000" label="2000" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;/ColorMap&gt;'</span> <span class="op">+</span> <span class="st">'&lt;/RasterSymbolizer&gt;'</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define an SLD style of discrete intervals to apply to the image.</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>sld_intervals <span class="op">=</span> <span class="st">'&lt;RasterSymbolizer&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMap type="intervals" extended="false" &gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ffffff" quantity="-500" label="-500"/&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#7a8737" quantity="-250" label="-250" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#acbe4d" quantity="-100" label="-100" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#0ae042" quantity="100" label="100" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#fff70b" quantity="270" label="270" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ffaf38" quantity="440" label="440" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#ff641b" quantity="660" label="660" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;ColorMapEntry color="#a41fd6" quantity="2000" label="2000" /&gt;'</span> <span class="op">+</span> <span class="st">'&lt;/ColorMap&gt;'</span> <span class="op">+</span> <span class="st">'&lt;/RasterSymbolizer&gt;'</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Map2.addLayer(dNBR.sldStyle(sld_intervals), {}, <span class="st">'dNBR classified'</span>)<span class="op">;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#==========================================================================================</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                                   ADD A LEGEND</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>legend_dict <span class="op">=</span> {</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Enhanced Regrowth, High"</span>: <span class="st">'7a8737'</span>,</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Enhanced Regrowth, Low'</span>:  <span class="st">'acbe4d'</span>,</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Unburned'</span>: <span class="st">'0ae042'</span>,</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Low Severity'</span>: <span class="st">'fff70b'</span>,</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Moderate-low Severity'</span>: <span class="st">'ffaf38'</span>,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Moderate-high Severity'</span>: <span class="st">'ff641b'</span>,</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'High Severity'</span>: <span class="st">'a41fd6'</span>,</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NA'</span>: <span class="st">'ffffff'</span>}</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>Map2.add_legend(title <span class="op">=</span> <span class="st">"dNBR Classes"</span>, legend_dict <span class="op">=</span> legend_dict)</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>Map2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Map2.addLayer(dNBR.sldStyle(sld_intervals), {}, <span class="st">'dNBR classified'</span>)<span class="op">;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#==========================================================================================</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                                   ADD A LEGEND</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>legend_dict <span class="op">=</span> {</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Enhanced Regrowth, High"</span>: <span class="st">'7a8737'</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Enhanced Regrowth, Low'</span>:  <span class="st">'acbe4d'</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Unburned'</span>: <span class="st">'0ae042'</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Low Severity'</span>: <span class="st">'fff70b'</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Moderate-low Severity'</span>: <span class="st">'ffaf38'</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Moderate-high Severity'</span>: <span class="st">'ff641b'</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'High Severity'</span>: <span class="st">'a41fd6'</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'NA'</span>: <span class="st">'ffffff'</span>}</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>Map2.add_legend(title <span class="op">=</span> <span class="st">"dNBR Classes"</span>, legend_dict <span class="op">=</span> legend_dict)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>Map2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
 
 <iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -1205,7 +1221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_af7be3e9dca85d648a9da547bd35833c {
+                #map_a045b7d5d6a4d1c16d7d91e4f3c15f56 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1225,7 +1241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_af7be3e9dca85d648a9da547bd35833c&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_a045b7d5d6a4d1c16d7d91e4f3c15f56&quot; ></div>
         
     
 <!doctype html>
@@ -1323,8 +1339,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script>
     
     
-            var map_af7be3e9dca85d648a9da547bd35833c = L.map(
-                &quot;map_af7be3e9dca85d648a9da547bd35833c&quot;,
+            var map_a045b7d5d6a4d1c16d7d91e4f3c15f56 = L.map(
+                &quot;map_a045b7d5d6a4d1c16d7d91e4f3c15f56&quot;,
                 {
                     center: [39.9, -122.9],
                     crs: L.CRS.EPSG3857,
@@ -1348,21 +1364,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
         
     
-            var tile_layer_c6d0f6e8caa92ae3fdb11d31b153de50 = L.tileLayer(
+            var tile_layer_159fca3b296f746d87b3cc44bccf2f9b = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 30, &quot;maxZoom&quot;: 30, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
-            var tile_layer_890dd8c6b6c6981223533fa7035fcf3f = L.tileLayer(
+            var tile_layer_b3d8103b31cf1df7a04669d57cca1172 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
             L.control.fullscreen(
                 {&quot;forceSeparateButton&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;title&quot;: &quot;Full Screen&quot;, &quot;titleCancel&quot;: &quot;Exit Full Screen&quot;}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
             var options = {
@@ -1372,13 +1388,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
-                map_af7be3e9dca85d648a9da547bd35833c
+                map_a045b7d5d6a4d1c16d7d91e4f3c15f56
             );
             options.edit.featureGroup = drawnItems;
-            var draw_control_bd45f6c995438cb595939dfa5dfe9503 = new L.Control.Draw(
+            var draw_control_491be9f56065e7ccaa3645dc9485213a = new L.Control.Draw(
                 options
-            ).addTo( map_af7be3e9dca85d648a9da547bd35833c );
-            map_af7be3e9dca85d648a9da547bd35833c.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_a045b7d5d6a4d1c16d7d91e4f3c15f56 );
+            map_a045b7d5d6a4d1c16d7d91e4f3c15f56.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -1388,7 +1404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 });
                 drawnItems.addLayer(layer);
              });
-            map_af7be3e9dca85d648a9da547bd35833c.on('draw:created', function(e) {
+            map_a045b7d5d6a4d1c16d7d91e4f3c15f56.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
             
@@ -1397,149 +1413,149 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             L.Control.geocoder(
                 {&quot;collapsed&quot;: true, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topleft&quot;}
             ).on('markgeocode', function(e) {
-                map_af7be3e9dca85d648a9da547bd35833c.setView(e.geocode.center, 11);
-            }).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+                map_a045b7d5d6a4d1c16d7d91e4f3c15f56.setView(e.geocode.center, 11);
+            }).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
 
         
     
-            map_af7be3e9dca85d648a9da547bd35833c.fitBounds(
+            map_a045b7d5d6a4d1c16d7d91e4f3c15f56.fitBounds(
                 [[39.9, -122.9], [39.9, -122.9]],
                 {&quot;maxZoom&quot;: 8.7}
             );
         
     
-            var tile_layer_d15fa270f954e41bc611912e75ba2996 = L.tileLayer(
+            var tile_layer_37810c603eea2e41cf8f9c58e266d929 = L.tileLayer(
                 &quot;https://mt1.google.com/vt/lyrs=s\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
                 {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 22, &quot;maxZoom&quot;: 22, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
-            var tile_layer_7e9396ba4a6a4d78950a9d6b32001554 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/de97b6fd6fe9e5e0f5fe85fa0fa8de92-70f066dc894f4647c8c7e5cc6aa96b6a/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_08a6d4d5f34e9b48fb0c4f6503027d47 = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/f3cfe7aaf61dc03fa1214102553503a4-4ad171112988ac58a652be4520d35584/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
-            var tile_layer_18f7f08a382eaa681453ca94a48eca64 = L.tileLayer(
-                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/87ad4d3d66d0250131c6f84f8aa6376f-78430c4a030b411b8b54c798f6d5ea0f/tiles/{z}/{x}/{y}&quot;,
+            var tile_layer_8cef4c1e4a0e6171974aa19a6d98468a = L.tileLayer(
+                &quot;https://earthengine.googleapis.com/v1alpha/projects/earthengine-legacy/maps/bb0ae8b3074ddbce468985201c850fa7-6a653cd127b378f312daf234486b9b8c/tiles/{z}/{x}/{y}&quot;,
                 {&quot;attribution&quot;: &quot;Google Earth Engine&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 24, &quot;maxZoom&quot;: 24, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1.0, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
     
-            var layer_control_765a15db5931fffe544e9c7f23ce4017 = {
+            var layer_control_33746f8b5e37996bf05d3231453ee6ab = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_c6d0f6e8caa92ae3fdb11d31b153de50,
+                    &quot;openstreetmap&quot; : tile_layer_159fca3b296f746d87b3cc44bccf2f9b,
                 },
                 overlays :  {
-                    &quot;Google Maps&quot; : tile_layer_890dd8c6b6c6981223533fa7035fcf3f,
-                    &quot;Google Satellite&quot; : tile_layer_d15fa270f954e41bc611912e75ba2996,
-                    &quot;dNBR greyscale&quot; : tile_layer_7e9396ba4a6a4d78950a9d6b32001554,
-                    &quot;dNBR classified&quot; : tile_layer_18f7f08a382eaa681453ca94a48eca64,
+                    &quot;Google Maps&quot; : tile_layer_b3d8103b31cf1df7a04669d57cca1172,
+                    &quot;Google Satellite&quot; : tile_layer_37810c603eea2e41cf8f9c58e266d929,
+                    &quot;dNBR greyscale&quot; : tile_layer_08a6d4d5f34e9b48fb0c4f6503027d47,
+                    &quot;dNBR classified&quot; : tile_layer_8cef4c1e4a0e6171974aa19a6d98468a,
                 },
             };
             L.control.layers(
-                layer_control_765a15db5931fffe544e9c7f23ce4017.base_layers,
-                layer_control_765a15db5931fffe544e9c7f23ce4017.overlays,
+                layer_control_33746f8b5e37996bf05d3231453ee6ab.base_layers,
+                layer_control_33746f8b5e37996bf05d3231453ee6ab.overlays,
                 {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
-            ).addTo(map_af7be3e9dca85d648a9da547bd35833c);
+            ).addTo(map_a045b7d5d6a4d1c16d7d91e4f3c15f56);
         
 </script>
 </html>" width="100%" height="600" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"=""></iframe>
 </div>
 </div>
-<div class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a> <span class="co">## Derive extent of burn severity classes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a> <span class="co">## Derive extent of burn severity classes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>thresholds <span class="op">=</span> ee.Image([<span class="op">-</span><span class="dv">1000</span>, <span class="op">-</span><span class="dv">251</span>, <span class="op">-</span><span class="dv">101</span>, <span class="dv">99</span>, <span class="dv">269</span>, <span class="dv">439</span>, <span class="dv">659</span>, <span class="dv">2000</span>])<span class="op">;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>classified <span class="op">=</span> dNBR.lt(thresholds).<span class="bu">reduce</span>(<span class="st">'sum'</span>).toInt()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>thresholds <span class="op">=</span> ee.Image([<span class="op">-</span><span class="dv">1000</span>, <span class="op">-</span><span class="dv">251</span>, <span class="op">-</span><span class="dv">101</span>, <span class="dv">99</span>, <span class="dv">269</span>, <span class="dv">439</span>, <span class="dv">659</span>, <span class="dv">2000</span>])<span class="op">;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>classified <span class="op">=</span> dNBR.lt(thresholds).<span class="bu">reduce</span>(<span class="st">'sum'</span>).toInt()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#count number of pixels in entire layer</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>allpix <span class="op">=</span>  classified.updateMask(classified)<span class="op">;</span> <span class="co">#mask the entire layer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#count number of pixels in entire layer</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>allpix <span class="op">=</span>  classified.updateMask(classified)<span class="op">;</span> <span class="co">#mask the entire layer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pixstats <span class="op">=</span> allpix.reduceRegion(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    reducer <span class="op">=</span> ee.Reducer.count(),               <span class="co"># count pixels in a single class</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    geometry <span class="op">=</span> aug_complex.geometry(),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> <span class="dv">30</span>, </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    maxPixels <span class="op">=</span> <span class="dv">10000000</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pixstats <span class="op">=</span> allpix.reduceRegion(</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    reducer <span class="op">=</span> ee.Reducer.count(),               <span class="co"># count pixels in a single class</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    geometry <span class="op">=</span> aug_complex.geometry(),</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> <span class="dv">30</span>, </span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    maxPixels <span class="op">=</span> <span class="dv">10000000</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>allpixels <span class="op">=</span> ee.Number(pixstats.get(<span class="st">'sum'</span>))<span class="op">;</span> <span class="co"># extract pixel count as a number</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>allpixels <span class="op">=</span> ee.Number(pixstats.get(<span class="st">'sum'</span>))<span class="op">;</span> <span class="co"># extract pixel count as a number</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create an empty list to store area values in</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>arealist <span class="op">=</span> []<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create an empty list to store area values in</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>arealist <span class="op">=</span> []<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function to derive extent of one burn severity class</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">#arguments are class number and class name</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> areacount(cnr, name):</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    singleMask <span class="op">=</span>  classified.updateMask(classified.eq(cnr))<span class="op">;</span> <span class="co"># mask a single class // count pixels in a single class</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> singleMask.reduceRegion(reducer <span class="op">=</span> ee.Reducer.count(), geometry <span class="op">=</span> aug_complex.geometry(), scale <span class="op">=</span> <span class="dv">30</span>, </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    maxPixels <span class="op">=</span> <span class="dv">10000000</span>)<span class="op">;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    pix <span class="op">=</span>  ee.Number(stats.get(<span class="st">'sum'</span>))<span class="op">;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    hect <span class="op">=</span> pix.multiply(<span class="dv">900</span>).divide(<span class="dv">10000</span>)<span class="op">;</span>               <span class="co">#Landsat pixel = 30m x 30m --&gt; 900 sqm</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    perc <span class="op">=</span> pix.divide(allpixels).multiply(<span class="dv">10000</span>).<span class="bu">round</span>().divide(<span class="dv">100</span>)<span class="op">;</span>   <span class="co"># get area percent by class and round to 2 decimals</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    arealist.append({<span class="st">'Class'</span>: name, <span class="st">'Pixels'</span>: pix, <span class="st">'Hectares'</span>: hect, <span class="st">'Percentage'</span>: perc})<span class="op">;</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># severity classes in different order</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>names2 <span class="op">=</span> [<span class="st">'NA'</span>, <span class="st">'High Severity'</span>, <span class="st">'Moderate-high Severity'</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="st">'Moderate-low Severity'</span>, <span class="st">'Low Severity'</span>,<span class="st">'Unburned'</span>, <span class="st">'Enhanced Regrowth, Low'</span>, <span class="st">'Enhanced Regrowth, High'</span>]<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function to derive extent of one burn severity class</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#arguments are class number and class name</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> areacount(cnr, name):</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    singleMask <span class="op">=</span>  classified.updateMask(classified.eq(cnr))<span class="op">;</span> <span class="co"># mask a single class // count pixels in a single class</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> singleMask.reduceRegion(reducer <span class="op">=</span> ee.Reducer.count(), geometry <span class="op">=</span> aug_complex.geometry(), scale <span class="op">=</span> <span class="dv">30</span>, </span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    maxPixels <span class="op">=</span> <span class="dv">10000000</span>)<span class="op">;</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    pix <span class="op">=</span>  ee.Number(stats.get(<span class="st">'sum'</span>))<span class="op">;</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    hect <span class="op">=</span> pix.multiply(<span class="dv">900</span>).divide(<span class="dv">10000</span>)<span class="op">;</span>               <span class="co">#Landsat pixel = 30m x 30m --&gt; 900 sqm</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    perc <span class="op">=</span> pix.divide(allpixels).multiply(<span class="dv">10000</span>).<span class="bu">round</span>().divide(<span class="dv">100</span>)<span class="op">;</span>   <span class="co"># get area percent by class and round to 2 decimals</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    arealist.append({<span class="st">'Class'</span>: name, <span class="st">'Pixels'</span>: pix, <span class="st">'Hectares'</span>: hect, <span class="st">'Percentage'</span>: perc})<span class="op">;</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co"># severity classes in different order</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>names2 <span class="op">=</span> [<span class="st">'NA'</span>, <span class="st">'High Severity'</span>, <span class="st">'Moderate-high Severity'</span>,</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="st">'Moderate-low Severity'</span>, <span class="st">'Low Severity'</span>,<span class="st">'Unburned'</span>, <span class="st">'Enhanced Regrowth, Low'</span>, <span class="st">'Enhanced Regrowth, High'</span>]<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(names2)):</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">&lt;</span> <span class="dv">8</span>:</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        areacount(i, names2[i])</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(names2)):</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">&lt;</span> <span class="dv">8</span>:</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        areacount(i, names2[i])</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.DataFrame(arealist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.DataFrame(arealist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pop each class into its own variable, then create a dictionary that uses .getInfo() on each value to convert from ee.Number to number</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#NA = arealist[0:1].pop()</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#High_Severity = arealist[0:2].pop()</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Moderate_high_Severity = arealist[0:3].pop()</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Moderate_low_Severity = arealist[0:4].pop()</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Low_Severity = arealist[0:5].pop()</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Unburned = arealist[0:6].pop()</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Enhanced_Regrowth_Low = arealist[0:7].pop()</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Enhanced_Regrowth_High = arealist[0:8].pop()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pop each class into its own variable, then create a dictionary that uses .getInfo() on each value to convert from ee.Number to number</span></span>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Takes quite a while to run</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">#NA = arealist[0:1].pop()</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#High_Severity = arealist[0:2].pop()</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Moderate_high_Severity = arealist[0:3].pop()</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Moderate_low_Severity = arealist[0:4].pop()</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Low_Severity = arealist[0:5].pop()</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Unburned = arealist[0:6].pop()</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Enhanced_Regrowth_Low = arealist[0:7].pop()</span></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Enhanced_Regrowth_High = arealist[0:8].pop()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">#stats = {'Class': ['NA', 'High Severity', 'Moderate-high Severity', 'Moderate-low Severity', 'Low Severity', 'Unburned', 'Enhanced Regrowth, Low', 'Enhanced Regrowth, High'], </span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Pixels': [NA['Pixels'].getInfo(), High_Severity['Pixels'].getInfo(), Moderate_high_Severity['Pixels'].getInfo(), Moderate_low_Severity['Pixels'].getInfo(), Low_Severity['Pixels'].getInfo(), Unburned['Pixels'].getInfo(), Enhanced_Regrowth_Low['Pixels'].getInfo(), Enhanced_Regrowth_High['Pixels'].getInfo() ],</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Hectares': [NA['Hectares'].getInfo(), High_Severity['Hectares'].getInfo(), Moderate_high_Severity['Hectares'].getInfo(), Moderate_low_Severity['Hectares'].getInfo(), Low_Severity['Hectares'].getInfo(), Unburned['Hectares'].getInfo(), Enhanced_Regrowth_Low['Hectares'].getInfo(), Enhanced_Regrowth_High['Hectares'].getInfo()],</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Percentage': [NA['Percentage'].getInfo(), High_Severity['Percentage'].getInfo(), Moderate_high_Severity['Percentage'].getInfo(), Moderate_low_Severity['Percentage'].getInfo(),Low_Severity['Percentage'].getInfo(), Unburned['Percentage'].getInfo(), Enhanced_Regrowth_Low['Percentage'].getInfo(),Enhanced_Regrowth_High['Percentage'].getInfo()]}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Takes quite a while to run</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">#stats = {'Class': ['NA', 'High Severity', 'Moderate-high Severity', 'Moderate-low Severity', 'Low Severity', 'Unburned', 'Enhanced Regrowth, Low', 'Enhanced Regrowth, High'], </span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Pixels': [NA['Pixels'].getInfo(), High_Severity['Pixels'].getInfo(), Moderate_high_Severity['Pixels'].getInfo(), Moderate_low_Severity['Pixels'].getInfo(), Low_Severity['Pixels'].getInfo(), Unburned['Pixels'].getInfo(), Enhanced_Regrowth_Low['Pixels'].getInfo(), Enhanced_Regrowth_High['Pixels'].getInfo() ],</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Hectares': [NA['Hectares'].getInfo(), High_Severity['Hectares'].getInfo(), Moderate_high_Severity['Hectares'].getInfo(), Moderate_low_Severity['Hectares'].getInfo(), Low_Severity['Hectares'].getInfo(), Unburned['Hectares'].getInfo(), Enhanced_Regrowth_Low['Hectares'].getInfo(), Enhanced_Regrowth_High['Hectares'].getInfo()],</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  'Percentage': [NA['Percentage'].getInfo(), High_Severity['Percentage'].getInfo(), Moderate_high_Severity['Percentage'].getInfo(), Moderate_low_Severity['Percentage'].getInfo(),Low_Severity['Percentage'].getInfo(), Unburned['Percentage'].getInfo(), Enhanced_Regrowth_Low['Percentage'].getInfo(),Enhanced_Regrowth_High['Percentage'].getInfo()]}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> {<span class="st">'Class'</span>: [<span class="st">'NA'</span>,</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'High Severity'</span>,</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Moderate-high Severity'</span>,</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Moderate-low Severity'</span>,</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Low Severity'</span>,</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Unburned'</span>,</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Enhanced Regrowth, Low'</span>,</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Enhanced Regrowth, High'</span>],</span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a> <span class="st">'Pixels'</span>: [<span class="dv">0</span>, <span class="dv">1067623</span>, <span class="dv">989630</span>, <span class="dv">968749</span>, <span class="dv">1061877</span>, <span class="dv">1522197</span>, <span class="dv">427507</span>, <span class="dv">237862</span>],</span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a> <span class="st">'Hectares'</span>: [<span class="dv">0</span>,</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="fl">96086.07</span>,</span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fl">89066.7</span>,</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fl">87187.41</span>,</span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="fl">95568.93</span>,</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="fl">136997.73</span>,</span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>  <span class="fl">38475.63</span>,</span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>  <span class="fl">21407.58</span>],</span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a> <span class="st">'Percentage'</span>: [<span class="dv">0</span>, <span class="fl">17.01</span>, <span class="fl">15.77</span>, <span class="fl">15.44</span>, <span class="fl">16.92</span>, <span class="fl">24.26</span>, <span class="fl">6.81</span>, <span class="fl">3.79</span>]}</span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>df_stats <span class="op">=</span> pd.DataFrame(stats).set_index(<span class="st">'Class'</span>)</span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>df_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> {<span class="st">'Class'</span>: [<span class="st">'NA'</span>,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'High Severity'</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Moderate-high Severity'</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Moderate-low Severity'</span>,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Low Severity'</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Unburned'</span>,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Enhanced Regrowth, Low'</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Enhanced Regrowth, High'</span>],</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a> <span class="st">'Pixels'</span>: [<span class="dv">0</span>, <span class="dv">1067623</span>, <span class="dv">989630</span>, <span class="dv">968749</span>, <span class="dv">1061877</span>, <span class="dv">1522197</span>, <span class="dv">427507</span>, <span class="dv">237862</span>],</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a> <span class="st">'Hectares'</span>: [<span class="dv">0</span>,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fl">96086.07</span>,</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fl">89066.7</span>,</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fl">87187.41</span>,</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  <span class="fl">95568.93</span>,</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  <span class="fl">136997.73</span>,</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  <span class="fl">38475.63</span>,</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fl">21407.58</span>],</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a> <span class="st">'Percentage'</span>: [<span class="dv">0</span>, <span class="fl">17.01</span>, <span class="fl">15.77</span>, <span class="fl">15.44</span>, <span class="fl">16.92</span>, <span class="fl">24.26</span>, <span class="fl">6.81</span>, <span class="fl">3.79</span>]}</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>df_stats <span class="op">=</span> pd.DataFrame(stats).set_index(<span class="st">'Class'</span>)</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>df_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
 <div>
 
 
@@ -1616,28 +1632,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="use-case-discussion" class="level3">
 <h3 class="anchored" data-anchor-id="use-case-discussion">Use Case Discussion</h3>
 <p>We found that nearly half of the burned area was determined to be between Moderate-Low to High severity. Additionally, the High severity area was the second largest percentage of area classified.</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df_stats[<span class="st">'Hectares'</span>].sort_values().plot.bar(color <span class="op">=</span> [<span class="st">'gold'</span>, <span class="st">'olive'</span>, <span class="st">'darkkhaki'</span>  , <span class="st">'orange'</span>, <span class="st">'orangered'</span>, <span class="st">'yellow'</span>,<span class="st">'purple'</span>, <span class="st">'springgreen'</span> ], width <span class="op">=</span> <span class="fl">0.75</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Hectares'</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Burn Severity Analysis of 2020 August Complex Fire'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>Text(0.5, 1.0, 'Burn Severity Analysis of 2020 August Complex Fire')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-40-output-2.png" class="img-fluid"></p>
+</div>
+</div>
 <div class="cell" data-execution_count="40">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df_stats[<span class="st">'Hectares'</span>].sort_values().plot.bar(color <span class="op">=</span> [<span class="st">'gold'</span>, <span class="st">'olive'</span>, <span class="st">'darkkhaki'</span>  , <span class="st">'orange'</span>, <span class="st">'orangered'</span>, <span class="st">'yellow'</span>,<span class="st">'purple'</span>, <span class="st">'springgreen'</span> ], width <span class="op">=</span> <span class="fl">0.75</span>)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Hectares'</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Burn Severity Analysis of 2020 August Complex Fire'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pie Chart of Percentage by Class</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>df_stats.plot(kind <span class="op">=</span> <span class="st">'pie'</span>, y <span class="op">=</span> <span class="st">'Percentage'</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>              colors <span class="op">=</span> [<span class="st">'floralwhite'</span>, <span class="st">'purple'</span>, <span class="st">'orangered'</span>  , <span class="st">'orange'</span>, <span class="st">'yellow'</span>, <span class="st">'springgreen'</span>,<span class="st">'darkkhaki'</span>, <span class="st">'olive'</span> ],</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>             legend<span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Burn Severity Analysis of 2020 August Complex Fire'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>Text(0.5, 1.0, 'Burn Severity Analysis of 2020 August Complex Fire')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-41-output-2.png" class="img-fluid"></p>
-</div>
-</div>
-<div class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pie Chart of Percentage by Class</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>df_stats.plot(kind <span class="op">=</span> <span class="st">'pie'</span>, y <span class="op">=</span> <span class="st">'Percentage'</span>,</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>              colors <span class="op">=</span> [<span class="st">'floralwhite'</span>, <span class="st">'purple'</span>, <span class="st">'orangered'</span>  , <span class="st">'orange'</span>, <span class="st">'yellow'</span>, <span class="st">'springgreen'</span>,<span class="st">'darkkhaki'</span>, <span class="st">'olive'</span> ],</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>             legend<span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Burn Severity Analysis of 2020 August Complex Fire'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
-<pre><code>Text(0.5, 1.0, 'Burn Severity Analysis of 2020 August Complex Fire')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-42-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -1650,7 +1666,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="references">References</h3>
 <ul>
 <li>Sentinel data GEE page:<a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2">https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2</a></li>
-<li>USFS MTBS Shapefile GEE page: https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description</li>
+<li>USFS MTBS Shapefile GEE page:<a href="https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description">https://developers.google.com/earth-engine/datasets/catalog/USFS_GTAC_MTBS_burned_area_boundaries_v1#description</a></li>
 <li>MTBS Project Page: https://www.mtbs.gov/</li>
 <li>Step by Step: Burn Severity mapping in Google Earth Engine https://code.earthengine.google.com/b455ba8cf4b5bee822bb7ff8935e6209</li>
 </ul>

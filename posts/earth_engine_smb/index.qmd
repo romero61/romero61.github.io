@@ -4,7 +4,7 @@ description: "Companion Interactive  Map — Remote Sensing of Chlorophyll-A Usi
 editor: visual
 categories: ['geemap','earth engine', 'solara', 'python']
 ---
-
+# ![](img/logos.png)
 <iframe
 	src="https://romero61-waterqualitymonitoring-smb.hf.space"
 	frameborder="0"
