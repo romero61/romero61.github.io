@@ -2,13 +2,14 @@
   {
     "listing": "/projects.html",
     "items": [
-      "/posts/earth_engine_smb/index.html",
-      "/posts/field_report/index.html",
-      "/posts/map_gallery/index.html",
       "/posts/redlining_NDVI/index.html",
-      "/posts/SentinelNBR/index.html",
+      "/posts/earth_engine_smb/index.html",
+      "/posts/stats_project/index.html",
+      "/posts/field_report/index.html",
+      "/posts/hf_ee_cnn/index.html",
       "/posts/SMB/index.html",
-      "/posts/stats_project/index.html"
+      "/posts/map_gallery/index.html",
+      "/posts/SentinelNBR/index.html"
     ]
   }
 ]

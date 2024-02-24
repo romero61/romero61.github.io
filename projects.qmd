@@ -3,7 +3,7 @@ title: "Projects"
 listing:
   contents: posts
   type: default
-  sort: false
+  sort: 'false'
   fields: [image, title,description]
   categories: true
 ---

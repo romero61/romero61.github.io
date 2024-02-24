@@ -1,0 +1,12 @@
+---
+title: "Earth Engine App - UNIVERSITIES SPACE RESEARCH ASSOCIATION - STI"
+description: "Providing a Keras CNN machine learning approach to estimate P.M. 2.5 levels, utilizing Google Earth Engine's MERRA-2 Data"
+editor: visual
+categories: ['geemap','earth engine', 'solara', 'python']
+---
+
+# ![](img/logos.png)
+
+<iframe src="https://romero61-usra-sti.hf.space" frameborder="0" width="850" height="3500">
+
+</iframe>
